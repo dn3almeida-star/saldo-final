@@ -1,0 +1,311 @@
+/* Saldo Final · automotive reference, 14 September 2026. */
+:root{color-scheme:dark;--bg:oklch(14.5% .022 245);--bg2:oklch(18% .025 245);--surface:oklch(22% .026 245);--surface2:oklch(27% .03 245);--surface3:oklch(31% .035 245);--text:oklch(97% .01 235);--muted:oklch(75% .025 240);--faint:oklch(57% .035 240);--accent:oklch(76% .17 215);--accent2:oklch(84% .13 210);--accent-deep:oklch(53% .14 220);--accent-glow:#087c9f;--accent-soft:#123844;--rose:oklch(62% .22 25);--rose-soft:#421c25;--emerald:oklch(78% .14 160);--p99:#FFDD00;--puber:#F1F3F8;--pindrive:#B4ED00;--ink-on-accent:oklch(18% .04 225);--display:var(--sans);--r-sm:14px;--r-md:20px;--r-lg:26px}
+:root{--motion-fast: 160ms;--motion-standard: 220ms;--motion-panel: 260ms;--ease-out: cubic-bezier(.16, 1, .3, 1)}
+body{background:var(--bg);padding-bottom:calc(104px + env(safe-area-inset-bottom))}body::before{display:none}
+header.top{position:relative;max-width:520px;margin:auto;padding:calc(20px + env(safe-area-inset-top)) 24px 12px;background:none;backdrop-filter:none}
+header.top .mark{background:none;box-shadow:none;color:var(--text);font-size:18px;letter-spacing:-1px;width:32px}
+header.top h1{font-size:17px;font-weight:550;letter-spacing:-.3px}.tagline{display:none}
+.icon-btn{border:0;border-radius:50%;background:#242424;color:var(--text);box-shadow:none;width:44px;height:44px}
+main{max-width:520px;padding:0 22px calc(128px + env(safe-area-inset-bottom))}.reveal{opacity:1;transform:none;animation:none}
+.view{display:none;opacity:1;transform:none}
+.view.active{display:block}
+.view.view-enter{opacity:0;transform:translateY(6px)}
+.view.active:not(.view-enter){transition:opacity var(--motion-standard) var(--ease-out),transform var(--motion-standard) var(--ease-out)}
+.modal-bg{visibility:hidden;opacity:0;pointer-events:none;transition:opacity var(--motion-panel) var(--ease-out),visibility 0s linear var(--motion-panel)}
+.modal-bg.show{visibility:visible;opacity:1;pointer-events:auto;transition-delay:0s}
+.modal{transform:translateY(14px);transition:transform var(--motion-panel) var(--ease-out)}
+.modal-bg.show .modal{transform:none}
+.vehicle-stage{position:relative;padding-top:6px;margin-bottom:8px}.hero-heading{justify-content:center;text-align:center;margin:0}
+.hero-heading h2{font-size:22px;font-weight:500;letter-spacing:-.6px}.hero-heading p{color:var(--muted);font-size:12px;margin-top:5px}
+.car-wrap{height:248px;margin:0 -12px;background:none}
+.car-caption{margin:-2px 0 6px;gap:8px}.model-hint{font-size:11px;color:var(--muted);text-align:left}
+.car-tools{gap:0}.car-tools button{background:none;border:0;font-size:22px;border-radius:50%;width:44px;height:44px}.car-tools button:hover{background:var(--surface2)}
+.period{padding:0;background:none;border:0;box-shadow:none;gap:12px;margin:0 0 12px}.period button{border-radius:0;padding:8px 0;font-size:12px;font-weight:500;position:relative;min-height:44px}
+.period button.active{background:none;color:var(--text);box-shadow:none}.period button.active::after{content:'';position:absolute;bottom:3px;height:2px;left:25%;right:25%;background:var(--accent);border-radius:2px}
+.drive-readouts{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:4px 0 25px;padding:0 5px}
+.drive-readouts>div{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;text-align:center}.drive-readouts>div+div{border-left:1px solid var(--line2);padding-left:0}
+.drive-readouts strong{display:block;font-size:30px;font-weight:450;letter-spacing:-1px;line-height:1.25;white-space:nowrap;overflow-wrap:normal;font-variant-numeric:tabular-nums}.drive-readouts span{font-size:12px;color:var(--muted);white-space:nowrap}.drive-readouts small{font-size:20px}
+.cockpit-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:12px;align-items:start}
+.goal-panel{grid-column:1/-1;grid-row:1;background:var(--surface);border:0;box-shadow:none;padding:20px 16px 16px;margin:0;border-radius:24px;display:flex;flex-direction:column;justify-content:flex-start;gap:8px;min-width:0;overflow:hidden}
+.goal-heading{font-size:13px;color:var(--muted)}.goal-heading span{display:block;font-size:11px;margin-top:1px}.goal-progress{font-size:30px;line-height:1.2;font-weight:450;margin:4px 0 10px;letter-spacing:-.7px}
+.gauge{margin:0;max-width:none}.g-track{stroke:#323232;stroke-width:3}.g-fill{stroke-width:3;filter:none}.g-tick{stroke:#545454;stroke-width:2.5}.needle{stroke-width:3;filter:none}.needle-hub{fill:#eee;stroke:none}
+.g-center{margin-top:8px}.g-center .meta{font-size:11px;flex-wrap:wrap;gap:3px;line-height:1.5}.g-center .meta b{color:var(--text)}.g-center .meta button{font-size:12px}.g-center .setmeta{border:0;background:#282828;color:var(--text);font-weight:500;padding:8px 10px;border-radius:12px;width:100%}
+.quick-actions{grid-column:1/-1;grid-row:2;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:9px}.quick-actions > .quick-action--primary{grid-column:1/-1}.quick-action-row{display:contents}.quick-action,.quick-action-row .quick-action{min-height:78px;padding:12px 10px;flex-wrap:nowrap;align-items:center;gap:9px;background:var(--surface);color:var(--text);border:0;border-radius:22px;box-shadow:none}
+.quick-action--primary{background:var(--accent-soft)}.quick-icon,.quick-action--primary .quick-icon{height:36px;width:36px;flex-basis:36px;border-radius:50%;color:var(--text);background:#292929}.quick-action--primary .quick-icon{color:var(--accent2);background:var(--accent-deep)}.quick-icon .ic{width:19px;height:19px}
+.quick-action b{font-size:13px;font-weight:550;line-height:1.4}.quick-action small{font-size:10px;line-height:1.35;color:var(--muted)}.quick-action--primary small{color:var(--muted)}.quick-action-row .quick-copy{width:auto}.quick-arrow{display:none}
+.quick-action--assistant{grid-column:1/-1;min-height:62px}.quick-action--assistant .quick-icon{color:var(--accent2);background:var(--accent-deep)}
+.flow{padding:16px 5px;margin:0 0 14px;border-bottom:1px solid var(--line);gap:16px}.flow>div{padding:0;background:none;border:0;text-align:left}.flow .k{font-size:12px}.flow .v{font-size:21px;font-weight:500;margin-top:3px}.flow .v.in{color:var(--text)}.flow .v.out{color:var(--text)}
+.card,.report-stat{background:var(--surface);box-shadow:none;border:0;border-radius:24px;padding:20px}.eyebrow{font-size:16px;font-weight:550}.section-label{font-weight:550;font-size:15px}
+.grid2{gap:0;border-bottom:1px solid var(--line);margin-bottom:22px}.stat{background:none;border:0;padding:12px 4px;min-height:90px;gap:9px}.stat-ic{width:30px;height:30px;background:none;color:var(--muted)}.stat .v{font-size:20px;font-weight:500}.stat .v.gold,.stat .v.rose{color:var(--text)}.stat .foot{font-size:10px}
+.recent-card .item,.item{background:transparent;box-shadow:none;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:14px 0}.item .badge{border:0;border-radius:14px;background:#292929}.item .a{font-size:15px;font-weight:550}.item .info .t{font-weight:500}.item .x{min-height:44px;min-width:44px}
+.empty{padding:22px 6px}.empty .mk{border:0;background:#262626;border-radius:50%;color:var(--muted);width:40px;height:40px}.empty .t{font-weight:500;font-size:14px}
+.report-stat .v{font-weight:500}.report-grid{gap:10px}.eff-row b,.plat .amt{font-weight:500}.track{background:#303030}
+input,select,textarea{border-color:#ffffff24;background:#121212;border-radius:13px}input::placeholder,textarea::placeholder{color:#a0a09e}.row>*{min-width:0}label{font-size:13px;font-weight:450}.btn{font-weight:600;box-shadow:none;border-radius:16px}.seg button{font-weight:500}.seg button.active{box-shadow:none;background:var(--accent-soft)}.chip{font-weight:500}
+nav.dock{background:#171717;border:1px solid #ffffff0c;backdrop-filter:none;box-shadow:0 8px 30px #0006;width:min(calc(100% - 32px),476px);padding:5px;border-radius:25px;bottom:calc(12px + env(safe-area-inset-bottom))}
+nav.dock button{font-size:10px;font-weight:500;padding:10px 0;color:#aeaeac;gap:5px}nav.dock button.active{background:none;color:var(--accent)}nav.dock button.active::before{content:'';position:absolute;width:4px;height:4px;background:var(--accent);border-radius:50%;top:3px}.dock .ic{width:21px;height:21px}
+.modal{border-radius:26px 26px 0 0;animation:none}.modal h3{font-weight:550}.toast{border-color:#ffffff24;background:#262626;color:var(--text);font-weight:500}
+.assistant-modal{display:grid;gap:14px}.assistant-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.assistant-head h3{margin-bottom:6px}.assistant-close{flex:0 0 40px;width:40px;height:40px;font-size:24px;line-height:1}
+.assistant-form{display:grid;gap:12px}.assistant-controls{display:grid;grid-template-columns:1fr 104px;gap:10px}.assistant-mic[aria-pressed="true"]{color:var(--accent2);box-shadow:inset 0 0 0 1px var(--accent)}
+.assistant-timer{justify-self:end;font-family:var(--display);font-variant-numeric:tabular-nums;color:var(--accent2);font-size:14px}
+.assistant-feedback{min-height:22px;color:var(--muted);font-size:12.5px;line-height:1.5}.assistant-feedback[data-state="error"],.assistant-feedback[data-state="quota"]{color:#ff9aa2}.assistant-feedback[data-state="recording"]{color:var(--accent2)}
+.assistant-feedback[data-state="recording"]::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--rose);margin-right:8px;box-shadow:0 0 0 4px rgba(255,92,115,.12)}
+.assistant-report{background:#202020;border:1px solid var(--line);border-radius:18px;padding:13px;color:var(--text);font-size:13px;line-height:1.45;font-variant-numeric:tabular-nums}
+.assistant-preview{background:#202020;border:1px solid var(--line);border-radius:20px;padding:14px}.assistant-preview-title{font-size:12px;color:var(--muted);margin-bottom:9px}
+.assistant-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}.assistant-row:last-child{border-bottom:0}.assistant-row strong{display:block;font-size:13.5px;font-weight:550}.assistant-row span{display:block;margin-top:3px;color:var(--muted);font-size:11.5px;line-height:1.35}.assistant-row b{font-weight:550;font-variant-numeric:tabular-nums;white-space:nowrap}
+.assistant-manual{margin-top:-4px}
+.btn,.quick-action,.period button,.seg button,.chip,.dock button,.account-btn,.icon-btn{transition:transform var(--motion-fast) var(--ease-out),background-color var(--motion-fast) ease,border-color var(--motion-fast) ease,color var(--motion-fast) ease,box-shadow var(--motion-fast) ease}
+.btn:focus-visible,.quick-action:focus-visible,.period button:focus-visible,.seg button:focus-visible,.chip:focus-visible,.dock button:focus-visible,.account-btn:focus-visible,.icon-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.btn:disabled,.quick-action:disabled,.period button:disabled,.seg button:disabled,.chip:disabled,.dock button:disabled{cursor:not-allowed;opacity:.55;transform:none}
+.btn:active,.quick-action:active,.period button:active,.seg button:active,.chip:active,.dock button:active,.account-btn:active,.icon-btn:active{transform:scale(.985)}
+.btn[aria-busy="true"],.account-btn[aria-busy="true"]{cursor:wait;opacity:.72}
+.item[role="button"]{transition:transform var(--motion-fast) var(--ease-out),border-color var(--motion-fast) ease,background-color var(--motion-fast) ease}
+.item[role="button"]:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.item[role="button"]:active{transform:scale(.995)}
+@media (hover:hover){.quick-action:hover,.item[role="button"]:hover{border-color:var(--line2)}.btn:hover,.account-btn:hover,.icon-btn:hover{box-shadow:0 12px 26px -18px var(--accent-glow)}}
+.toast{transition:opacity var(--motion-standard) var(--ease-out),transform var(--motion-standard) var(--ease-out)}
+.empty,.item{transition:background-color var(--motion-standard) ease,border-color var(--motion-standard) ease,opacity var(--motion-standard) var(--ease-out)}
+.fill{transition:width var(--motion-panel) var(--ease-out)}
+@media (prefers-reduced-motion:reduce){.btn,.quick-action,.period button,.seg button,.chip,.dock button,.account-btn,.icon-btn,.item[role="button"],.toast,.empty,.item,.fill{transition:none!important}.assistant-feedback[data-state="recording"]::before{box-shadow:none}}
+@media(min-width:760px){header.top{padding-top:30px}main{padding-top:6px}.car-wrap{height:320px}.hero-heading h2{font-size:26px}.drive-readouts strong{font-size:36px}.quick-action b{font-size:15px}.quick-action small{font-size:12px}.goal-progress{font-size:36px}}
+@media(max-width:360px){main{padding-left:16px;padding-right:16px}.car-wrap{height:240px}.quick-actions{grid-template-columns:1fr}.quick-actions > .quick-action--primary,.quick-action--assistant{grid-column:auto}.quick-action,.quick-action-row .quick-action{padding:10px 8px;gap:6px}.quick-icon{width:30px;flex-basis:30px}.quick-action b{font-size:12px}.quick-action small{font-size:10px}.drive-readouts strong{font-size:26px}.goal-panel{padding:15px 10px}.car-caption{gap:0}.assistant-controls{grid-template-columns:1fr}.assistant-row{align-items:flex-start;flex-direction:column}.assistant-row b{align-self:flex-end}}
+
+/* Velocímetro financeiro inspirado no painel do Prisma. */
+.prisma-gauge{--prisma-cyan:#00D8FF;--prisma-red:#FF2732;--prisma-white:#F4F8FA;--prisma-metal:#5D6870;max-width:none;width:100%;margin:0;position:relative}
+.prisma-gauge svg{display:block;width:100%;aspect-ratio:4/3;overflow:visible}
+.prisma-gauge .dial-face{fill:#202328}
+.prisma-gauge .dial-bezel{fill:none;stroke:#090B0E;stroke-width:24;stroke-linecap:round;filter:drop-shadow(0 7px 10px rgba(0,0,0,.55))}
+.prisma-gauge .dial-recess{fill:none;stroke:#33383D;stroke-width:15;stroke-linecap:round}
+.prisma-gauge .zone-base{fill:none;stroke-width:13;stroke-linecap:butt;opacity:.3}
+.prisma-gauge .zone-base.zone-cyan{stroke:var(--prisma-cyan);filter:drop-shadow(0 0 6px rgba(0,216,255,.45))}
+.prisma-gauge .scale-segment{stroke:#080B0E;stroke-width:.9;stroke-linejoin:round}
+.prisma-gauge .scale-segment.zone-cyan{fill:var(--prisma-cyan);filter:drop-shadow(0 0 4px rgba(0,216,255,.7))}
+.prisma-gauge .scale-segment.major{stroke:var(--prisma-white);stroke-width:1.35}
+.prisma-gauge .scale-label{fill:var(--prisma-white);font-family:var(--display);font-size:14px;font-weight:800;filter:drop-shadow(0 0 3px rgba(244,248,250,.35))}
+.prisma-gauge .needle-assembly{transition:transform .72s cubic-bezier(.16,1,.3,1)}
+.prisma-gauge .needle-blade{fill:var(--prisma-red);stroke:#B71925;stroke-width:.85;filter:none}
+.prisma-gauge .needle-hub-outer{fill:#11151A;stroke:var(--prisma-metal);stroke-width:2.4}
+.prisma-gauge .needle-hub-inner{fill:#2A3036;stroke:#090B0E;stroke-width:1.5}
+.prisma-gauge .needle-hub-cap{fill:#0B0E12;stroke:#737E86;stroke-width:1}
+.prisma-gauge .g-digital{position:static;display:flex;align-items:baseline;justify-content:center;gap:10px;padding:6px 0 0;text-align:center}
+.prisma-gauge .g-digital-label{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em}
+.prisma-gauge .g-digital strong{color:var(--text);font-size:26px;font-weight:550;font-variant-numeric:tabular-nums}
+.prisma-gauge .g-center{margin-top:4px}
+@media(max-width:360px){.prisma-gauge .scale-label{font-size:13px}}
+@media(prefers-reduced-motion:reduce){.prisma-gauge .needle-assembly{transition:none!important}}
+@media (prefers-reduced-motion:reduce){.view,.view.active,.view.view-enter,.modal,.modal-bg{transition:none!important;transform:none!important;opacity:1!important}}
+
+/* Cockpit vivo: hierarquia e feedback sem alterar o layout aprovado. */
+.cockpit-grid{gap:14px}
+.goal-panel,.quick-action,.card,.report-stat,.flow>div,.stat{border:1px solid color-mix(in srgb,var(--line2) 74%,var(--accent) 26%);box-shadow:0 18px 34px -26px #000, inset 0 1px 0 rgba(255,255,255,.045)}
+.goal-panel{background:color-mix(in srgb,var(--surface) 91%,var(--accent) 9%);box-shadow:0 24px 42px -30px #000,0 0 0 1px color-mix(in srgb,var(--accent-glow) 52%,transparent),inset 0 1px 0 rgba(255,255,255,.06)}
+.drive-readouts strong,.goal-progress,.g-digital strong,.flow .v,.report-stat .v{font-variant-numeric:tabular-nums;letter-spacing:-.025em}
+.number-value{font-variant-numeric:tabular-nums;transition:color var(--motion-fast) ease,text-shadow var(--motion-fast) ease,opacity var(--motion-fast) ease}
+.number-value.is-counting{color:inherit;text-shadow:none}
+.quick-action{background:color-mix(in srgb,var(--surface) 94%,var(--accent) 6%);transition:transform var(--motion-fast) var(--ease-out),background-color var(--motion-fast) ease,border-color var(--motion-fast) ease,color var(--motion-fast) ease,box-shadow var(--motion-fast) ease}
+.quick-action--primary{background:var(--accent-soft);border-color:var(--accent-glow);box-shadow:0 18px 32px -23px var(--accent-glow),inset 0 1px 0 rgba(255,255,255,.08)}
+.quick-action--primary .quick-icon{box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 64%,transparent),0 0 18px -8px var(--accent)}
+.card,.report-stat{background:color-mix(in srgb,var(--surface) 94%,var(--accent) 6%)}
+.flow>div,.stat{background:color-mix(in srgb,var(--surface) 96%,var(--accent) 4%)}
+nav.dock button.active{background-color:#123844;color:var(--accent2);box-shadow:inset 0 0 0 1px var(--accent-glow),0 10px 24px -18px var(--accent-glow)}
+nav.dock button.active::before{width:5px;height:5px;top:4px;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+.motion-stagger>*{--motion-delay:0ms}
+.motion-stagger>*:nth-child(2){--motion-delay:45ms}.motion-stagger>*:nth-child(3){--motion-delay:90ms}.motion-stagger>*:nth-child(4){--motion-delay:135ms}
+.view.active .reveal{animation:cockpit-rise 420ms var(--ease-out) both;animation-delay:var(--motion-delay,0ms)}
+@keyframes cockpit-rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (hover:hover){.quick-action:hover,.card:hover,.report-stat:hover,.item[role="button"]:hover{border-color:color-mix(in srgb,var(--accent) 68%,var(--line2));box-shadow:0 22px 38px -28px #000,0 0 0 1px color-mix(in srgb,var(--accent-glow) 32%,transparent),inset 0 1px 0 rgba(255,255,255,.055)}.dock button:hover{color:var(--accent2)}}
+@media (prefers-reduced-motion:reduce){.number-value,.number-value.is-counting,.view.active .reveal,.motion-stagger>*{transition:none!important;animation:none!important;transform:none!important;text-shadow:none!important}.quick-action,.card,.report-stat,.flow>div,.stat,nav.dock button{transition:none!important}}
+
+/* ---------- Refino visual, 18 de setembro de 2026 ----------
+   A interface nao muda de lugar: as mesmas secoes, na mesma ordem.
+   Muda o acabamento — a voz dos numeros, a hierarquia das bordas e o
+   movimento. O carro 3D (.car-wrap, #prisma3d, .car-tools) fica intocado. */
+
+:root{
+  --sans:'Manrope',-apple-system,'Segoe UI Variable','Segoe UI',system-ui,Roboto,sans-serif;
+  --display:'Barlow Semi Condensed',-apple-system,'Segoe UI',system-ui,sans-serif;
+  --press:cubic-bezier(.34,1.4,.64,1);
+}
+body,input,select,textarea,button{font-family:var(--sans)}
+
+/* Tudo que e valor fala na voz condensada: o Barlow nasceu de placa de
+   rodovia e letreiro de veiculo, e por ser estreito cabe R$ 1.284,55 sem
+   encostar na borda do celular. */
+.drive-readouts strong,.goal-progress,.prisma-gauge .g-digital strong,.g-center .val,
+.flow .v,.stat .v,.report-stat .v,.item .badge .n,.item .a,.eff-row b,.plat .amt,
+.previa .val,.chat-time,.assistant-timer,.assistant-row b,
+input.money,input.count,.prefix span,header.top .mark{
+  font-family:var(--display);font-variant-numeric:tabular-nums;letter-spacing:-.012em;font-weight:600}
+/* O texto continua no Manrope, mesmo onde o app pedia a fonte de numero. */
+header.top h1,.hero-heading h2,.eyebrow,.section-label,.modal h3,.btn,.chat-who b,.empty .t{
+  font-family:var(--sans);letter-spacing:-.2px}
+/* Condensada rende menos altura aparente: os numeros grandes sobem um pouco. */
+.drive-readouts strong,.goal-progress{font-size:33px}
+.prisma-gauge .g-digital strong{font-size:28px}
+@media(min-width:760px){.drive-readouts strong,.goal-progress{font-size:39px}}
+@media(max-width:360px){.drive-readouts strong{font-size:28px}}
+/* O "R$" recua para os digitos mandarem — e o numero que se le de relance. */
+.cur{font-style:normal;font-size:.62em;font-weight:500;opacity:.6}
+
+/* Hierarquia: a borda de destaque passa a ser exclusiva da meta. Com a mesma
+   borda azulada em todo cartao, tudo gritava junto e nada era ouvido. */
+.quick-action,.card,.report-stat{border:1px solid #1f2a34;box-shadow:none;background:var(--surface)}
+.flow>div,.stat{border:0;box-shadow:none;background:none}
+.quick-action--primary{background:var(--accent-soft);border-color:#1d5568;box-shadow:none}
+.goal-panel{background:color-mix(in srgb,var(--surface) 88%,var(--accent) 12%);
+  border:1px solid #1d4d5e;box-shadow:0 22px 40px -30px #000}
+
+/* Entradas e saidas voltam a ter sentido: eram dois valores brancos iguais,
+   enquanto em Relatorios ja apareciam em ciano e vermelho. */
+.flow .v.in{color:var(--accent2)}
+.flow .v.out{color:var(--rose)}
+
+/* "editar" e "excluir" eram texto cinza do tamanho de uma legenda. Viram
+   botoes de verdade; excluir em vermelho, porque apagar nao e editar. */
+.item .actions{gap:6px;margin-top:9px;flex-wrap:nowrap}
+.item .x{min-height:34px;padding:0 11px;border-radius:17px;border:1px solid var(--line);
+  background:#171e26;color:var(--muted);font:600 11px var(--sans);white-space:nowrap}
+.item .x[onclick^="del("]{border-color:#3a2027;background:#1e1418;color:var(--rose)}
+
+/* As barras das plataformas enchem do zero quando a tela entra. */
+.view.active .track .fill{transform-origin:left center;animation:fill-in 700ms var(--ease-out) both}
+@keyframes fill-in{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+/* O traco da aba cresce do centro em vez de piscar de uma para a outra. */
+.period button.active::after{animation:tab-mark 220ms var(--ease-out)}
+@keyframes tab-mark{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+/* Toque com volta elastica: 1,5% nao se sentia; 4% se sente ate de luva. */
+.btn,.quick-action,.period button,.seg button,.chip,.dock button,.account-btn,.icon-btn,.item .x{
+  transition:transform var(--motion-fast) var(--press),background-color var(--motion-fast) ease,
+  border-color var(--motion-fast) ease,color var(--motion-fast) ease,box-shadow var(--motion-fast) ease}
+.btn:active,.quick-action:active,.seg button:active,.chip:active,.account-btn:active,
+.icon-btn:active,.item .x:active{transform:scale(.96)}
+/* O assistente recolhe ao rolar para baixo: parado, ele tapa o "Salvar" na
+   aba Corridas e o valor da 99 em Relatorios. */
+.assistant-fab{transition:transform var(--motion-standard) var(--ease-out),opacity var(--motion-standard) var(--ease-out)}
+.assistant-fab[data-tucked="true"]{transform:translateY(96px) scale(.86);opacity:0;pointer-events:none}
+
+@media (prefers-reduced-motion:reduce){
+  .view.active .track .fill,.period button.active::after{animation:none!important}
+  .assistant-fab{transition:none!important}
+}
+/* ---------- Velocimetro: os numeros passam a querer dizer alguma coisa ----------
+   A escala ia de 0 a 8, e o 8 nao era oito de nada: era a meta dividida por
+   12,5. Agora le-se 0 / 25 / 50 / 75 / 100, com a unidade escrita no mostrador. */
+.prisma-gauge .scale-unit{fill:var(--faint);font-family:var(--sans);font-size:9px;letter-spacing:.14em}
+/* O ultimo quinto do arco era vermelho, copiado do conta-giros do Prisma. La
+   vermelho quer dizer "nao va"; aqui esse trecho e o motorista chegando na
+   meta do dia — a melhor coisa que podia acontecer, pintada de alarme. */
+.prisma-gauge .zone-base.zone-goal{stroke:var(--emerald);filter:drop-shadow(0 0 6px rgba(79,217,155,.4))}
+.prisma-gauge .scale-segment.zone-goal{fill:var(--emerald);filter:drop-shadow(0 0 4px rgba(79,217,155,.6))}
+.prisma-gauge .scale-label.zone-goal{fill:var(--emerald);filter:drop-shadow(0 0 3px rgba(79,217,155,.45))}
+/* Vermelho passa a querer dizer uma coisa so: o periodo fechou no negativo. */
+.prisma-gauge[data-gauge-state="alert"] .scale-segment{fill:var(--rose);filter:drop-shadow(0 0 4px rgba(251,91,74,.55))}
+.prisma-gauge[data-gauge-state="alert"] .scale-label{fill:var(--rose);filter:none}
+.prisma-gauge[data-gauge-state="alert"] .zone-base{stroke:var(--rose)}
+.prisma-gauge[data-gauge-state="alert"] .g-digital strong{color:var(--rose)}
+/* Sem meta nao ha o que medir: o mostrador apaga em vez de fingir precisao. */
+.prisma-gauge[data-gauge-state="empty"] .scale-segment{fill:var(--faint);filter:none}
+.prisma-gauge[data-gauge-state="empty"] .scale-label{fill:var(--muted);filter:none}
+.prisma-gauge[data-gauge-state="empty"] .zone-base{stroke:var(--faint);opacity:.18}
+.prisma-gauge[data-gauge-state="empty"] .needle-blade{fill:#55606b;stroke:#3b4b59}
+
+/* O estado deixa de ser calculado e jogado fora. */
+.goal-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.goal-chip{display:inline-flex;align-items:center;gap:6px;flex-shrink:0;min-height:26px;padding:0 11px;
+  border-radius:13px;background:var(--accent-soft);border:1px solid #1d5568;color:var(--accent2);
+  font-size:11px;font-weight:600;white-space:nowrap}
+.goal-chip::before{content:"";width:6px;height:6px;border-radius:3px;background:currentColor}
+.goal-chip[hidden]{display:none}
+.goal-panel:has([data-gauge-state="success"]) .goal-chip{background:#0f2e22;border-color:#1d5c43;color:var(--emerald)}
+.goal-panel:has([data-gauge-state="alert"]) .goal-chip{background:#2a1418;border-color:#4d2028;color:var(--rose)}
+
+/* Ponteiro mais fino, cubo menor, e a chegada com o repique de um ponteiro real. */
+.prisma-gauge .needle-hub-outer{r:11;stroke-width:2}
+.prisma-gauge .needle-hub-inner{r:5.5;stroke-width:1.3}
+.prisma-gauge .needle-hub-cap{r:2.4}
+.prisma-gauge .needle-assembly{transition:transform .78s cubic-bezier(.22,1.12,.36,1)}
+@media(prefers-reduced-motion:reduce){.prisma-gauge .needle-assembly{transition:none!important}}
+
+/* O chip do estado sai do fluxo do titulo: em linha ele empurrava o "hoje"
+   para o lado, quando ele tem de ficar embaixo de "Sua meta". */
+.goal-panel{position:relative}
+.goal-heading{display:block}
+.goal-chip{position:absolute;top:18px;right:16px}
+/* Rotulo em cima, valor embaixo: em linha unica o par ficava largo demais. */
+.prisma-gauge .g-digital{flex-direction:column;align-items:center;gap:1px;padding-top:2px}
+.prisma-gauge .g-digital-label{font-size:10px}
+.g-center .meta{margin-top:5px}
+
+/* Aviso de leitura fraca: a previa continua aparecendo, porque nada e gravado
+   sem o motorista confirmar — mas com a borda de atencao. */
+.bolha.deles.aviso{border-color:#5a3a20;color:var(--text)}
+
+/* O numero grande e o que se olha de relance: ele tambem responde ao estado. */
+.goal-panel:has([data-gauge-state="success"]) .goal-progress{color:var(--emerald)}
+.goal-panel:has([data-gauge-state="alert"]) .goal-progress{color:var(--rose)}
+
+/* iOS desenha input[type=date] como controle nativo: ele cresce ate caber o
+   texto e ignora o width:100%, estourando a borda do cartao. O defeito nao
+   aparece no Chromium nem no WebKit de computador, so no Safari do iPhone —
+   por isso a correcao e no proprio controle, tirando a aparencia nativa. */
+input[type="date"]{-webkit-appearance:none;appearance:none;display:block;
+  width:100%;min-width:0;max-width:100%;text-align:left}
+input[type="date"]::-webkit-date-and-time-value{text-align:left;margin:0;min-width:0}
+/* Rede de seguranca para a mesma classe de defeito em qualquer campo. */
+.field>input,.field>textarea,.prefix>input{max-width:100%;min-width:0}
+
+/* Categoria: um campo so, que abre a lista por cima. Eram catorze botoes
+   soltos embrulhando em seis fileiras tortas. */
+.picker{display:flex;align-items:center;gap:11px;width:100%;min-height:54px;padding:0 14px;
+  border:1px solid var(--line2);border-radius:13px;background:#121212;color:var(--text);
+  font:500 16px var(--sans);text-align:left;cursor:pointer}
+.picker-ic{display:flex;align-items:center;justify-content:center;width:32px;height:32px;flex-shrink:0;
+  border-radius:16px;background:var(--surface3);color:var(--accent2)}
+.picker-ic .ic{width:18px;height:18px}
+.picker-nome{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.picker-seta{flex-shrink:0;color:var(--muted);width:20px;height:20px}
+.picker:active{transform:scale(.99)}
+
+.cat-sheet{padding-top:0}
+.cat-head{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  position:sticky;top:0;z-index:1;background:var(--surface);padding:20px 0 14px}
+.cat-head h3{margin:0}
+.cat-x{width:44px;height:44px;flex-shrink:0;border-radius:22px;border:1px solid var(--line);
+  background:var(--bg2);color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.cat-x .ic{width:18px;height:18px}
+.cat-lista{display:flex;flex-direction:column;padding-bottom:4px}
+.cat-opcao{display:flex;align-items:center;gap:13px;width:100%;min-height:56px;padding:0 4px;
+  border:0;border-bottom:1px solid var(--line);background:none;color:var(--text);
+  font:500 16px var(--sans);text-align:left;cursor:pointer}
+.cat-opcao:last-child{border-bottom:0}
+.cat-ic{display:flex;align-items:center;justify-content:center;width:36px;height:36px;flex-shrink:0;
+  border-radius:18px;background:var(--surface3);color:var(--muted)}
+.cat-ic .ic{width:19px;height:19px}
+.cat-nome{flex:1;min-width:0}
+.cat-check{flex-shrink:0;width:20px;height:20px;color:var(--accent);opacity:0}
+.cat-opcao[aria-selected="true"]{color:var(--accent2)}
+.cat-opcao[aria-selected="true"] .cat-ic{background:var(--accent-soft);color:var(--accent2)}
+.cat-opcao[aria-selected="true"] .cat-check{opacity:1}
+.cat-opcao:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:10px}
+@media (hover:hover){.cat-opcao:hover{background:var(--bg2)}}
+
+/* Para saber, olhando, se o aparelho esta servindo a copia velha do cache. */
+.app-versao{margin:2px 0 10px;text-align:center;font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums}
+
+/* Detalhe tecnico da recusa do assistente: fechado por padrao, discreto, e so
+   aparece quando o servidor diz por que recusou. */
+.chat-detalhe{align-self:flex-start;max-width:92%;margin:2px 0 0}
+.chat-detalhe summary{cursor:pointer;font-size:12px;color:var(--faint);
+  padding:4px 2px;list-style:none;letter-spacing:.02em}
+.chat-detalhe summary::-webkit-details-marker{display:none}
+.chat-detalhe summary::before{content:"▸ ";font-size:10px}
+.chat-detalhe[open] summary::before{content:"▾ "}
+.chat-detalhe code{display:block;margin-top:4px;padding:9px 11px;border-radius:10px;
+  border:1px solid #2a2118;background:#16120d;color:var(--muted);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;
+  line-height:1.5;white-space:pre-wrap;word-break:break-word}
+
+/* A frase do motorista na previa de "acrescentar observacao": entre aspas, para
+   ficar claro que e o texto dele e nao um rotulo do app. */
+.previa-obs{margin:-2px 0 6px;padding:8px 11px;border-radius:10px;
+  border:1px solid #223040;background:#101822;color:var(--muted);
+  font-size:13.5px;line-height:1.45}
