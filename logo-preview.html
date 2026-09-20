@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090d13">
+  <title>Prévia das logos · Saldo Final</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090d13;
+      --panel: #111923;
+      --line: rgba(255,255,255,.10);
+      --text: #f6f8fb;
+      --muted: #a8b1c0;
+      --cyan: #00d8ff;
+      --red: #ff2732;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      background: radial-gradient(circle at 50% -10%, #1a2a3c 0, var(--bg) 48%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding: max(22px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom));
+    }
+    main { width: min(860px, 100%); margin: 0 auto; }
+    header { margin: 4px 0 22px; }
+    .back { color: var(--muted); text-decoration: none; font-size: 14px; }
+    h1 { margin: 18px 0 8px; font-size: clamp(25px, 7vw, 40px); letter-spacing: -.03em; }
+    p { margin: 0; color: var(--muted); line-height: 1.5; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .card {
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(24,34,46,.94), rgba(14,20,28,.94));
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: 0 24px 55px rgba(0,0,0,.30);
+    }
+    .card a { display: block; background: #000; }
+    .card img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
+    .copy { padding: 14px 15px 17px; }
+    .number { color: var(--cyan); font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    h2 { margin: 5px 0 2px; font-size: 19px; }
+    .hint { font-size: 13px; }
+    footer { margin-top: 18px; color: var(--muted); font-size: 13px; text-align: center; }
+    @media (max-width: 560px) { .grid { grid-template-columns: 1fr; gap: 16px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <a class="back" href="/">← Voltar para o Saldo Final</a>
+      <h1>Prévia das logos</h1>
+      <p>Toque em qualquer imagem para abrir em tamanho grande. Nenhuma delas foi aplicada ao aplicativo.</p>
+    </header>
+    <section class="grid" aria-label="Duas propostas de logo">
+      <article class="card">
+        <a href="assets/logo-preview-coin.png" aria-label="Abrir logo moeda em tamanho grande">
+          <img src="assets/logo-preview-coin.png" alt="Logo conceito moeda ou token, com aro azul e segmento vermelho">
+        </a>
+        <div class="copy">
+          <div class="number">Conceito 1</div>
+          <h2>Moeda / token</h2>
+          <p class="hint">Representa o resultado fechado do dia.</p>
+        </div>
+      </article>
+      <article class="card">
+        <a href="assets/logo-preview-wallet.png" aria-label="Abrir logo carteira em tamanho grande">
+          <img src="assets/logo-preview-wallet.png" alt="Logo conceito carteira, com contorno azul e fecho vermelho">
+        </a>
+        <div class="copy">
+          <div class="number">Conceito 2</div>
+          <h2>Carteira</h2>
+          <p class="hint">Representa guardar e controlar o saldo.</p>
+        </div>
+      </article>
+    </section>
+    <footer>Prévia visual · Saldo Final</footer>
+  </main>
+</body>
+</html>

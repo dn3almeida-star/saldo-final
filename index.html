@@ -1,0 +1,2016 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0d121a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d1118'/%3E%3Ctext x='32' y='43' font-family='Arial,sans-serif' font-weight='800' font-size='24' fill='%2300c8f5' text-anchor='middle'%3ESF%3C/text%3E%3C/svg%3E">
+<title>Saldo Final</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --bg:oklch(14.5% .022 245); --bg2:oklch(18% .025 245); --surface:oklch(22% .026 245); --surface2:oklch(27% .03 245); --surface3:oklch(31% .035 245);
+    --line:#273440; --line2:#3b4b59;
+    --text:oklch(97% .01 235); --muted:oklch(75% .025 240); --faint:oklch(57% .035 240);
+    --accent:oklch(76% .17 215); --accent2:oklch(84% .13 210); --accent-deep:oklch(53% .14 220);
+    --accent-glow:#087c9f; --accent-soft:#123844;
+    --rose:oklch(62% .22 25); --rose-soft:#421c25;
+    --emerald:oklch(78% .14 160);
+    --p99:#FFDD00; --puber:#F1F3F8; --pindrive:#B4ED00;
+    --ink-on-accent:oklch(18% .04 225);
+    --display:ui-rounded,-apple-system,'SF Pro Rounded','Segoe UI Variable','Segoe UI',system-ui,sans-serif;
+    --sans:-apple-system,'Segoe UI Variable','Segoe UI',system-ui,Roboto,sans-serif;
+    --r-sm:8px; --r-md:12px; --r-lg:18px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+  html,body{height:100%;touch-action:pan-y}
+  body{
+    font-family:var(--sans); color:var(--text); font-size:16px; line-height:1.5;
+    background:
+      linear-gradient(180deg,#18212b 0%,#0d1118 44%,#080b10 100%);
+    padding-bottom:calc(112px + env(safe-area-inset-bottom));
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.08;
+    background-image:linear-gradient(rgba(255,255,255,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.16) 1px,transparent 1px);
+    background-size:44px 44px; -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.9),transparent 72%); mask-image:linear-gradient(180deg,rgba(0,0,0,.9),transparent 72%);}
+  .fig{font-variant-numeric:tabular-nums}
+  .disp{font-family:var(--display)}
+  button,input,select,textarea{min-height:44px}
+  button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+  svg.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+  header.top{position:sticky; top:0; z-index:40; display:flex; align-items:center; justify-content:space-between;
+    padding:calc(16px + env(safe-area-inset-top)) 18px 13px; background:linear-gradient(180deg,rgba(13,17,24,.97) 68%,rgba(13,17,24,0)); backdrop-filter:blur(12px);}
+  header.top .brand{display:flex; align-items:center; gap:12px}
+  header.top .mark{width:40px;height:40px;border-radius:var(--r-md); display:grid;place-items:center;
+    color:var(--accent); font-family:var(--display); font-size:17px; font-weight:900;
+    background:linear-gradient(180deg,#202a34,#10151c);
+    box-shadow:inset 0 0 0 1px var(--accent-glow), 0 16px 30px -18px #000;}
+  header.top h1{font-family:var(--display); font-size:20px; font-weight:800}
+  header.top .tagline{font-size:12.5px; color:var(--muted); margin-top:2px}
+  .icon-btn{width:42px;height:42px;border-radius:var(--r-md); border:1px solid var(--accent-glow); background:#111820; color:var(--accent); display:grid;place-items:center; cursor:pointer; box-shadow:0 14px 28px -20px #000}
+  .icon-btn:active{background:#151b2d}
+  .top-actions{display:flex;align-items:center;gap:8px}
+  .account-btn{min-height:42px;padding:0 12px;border-radius:var(--r-md);border:1px solid var(--line2);background:var(--surface);color:var(--text);font:700 12px var(--sans);cursor:pointer}
+  .account-btn:hover{border-color:var(--accent);color:var(--accent2)}
+
+  main{position:relative; z-index:1; width:100%; padding:6px 16px calc(128px + env(safe-area-inset-bottom)); max-width:430px; margin:0 auto}
+  .view{display:none} .view.active{display:block}
+  .reveal{opacity:0; transform:translateY(9px); animation:up .55s cubic-bezier(.2,.7,.2,1) forwards}
+  @keyframes up{to{opacity:1;transform:none}}
+
+  .card{position:relative; background:linear-gradient(180deg,var(--surface),var(--bg2)); border:1px solid var(--line); border-radius:var(--r-sm); padding:18px; margin-bottom:12px; box-shadow:0 24px 48px -34px rgba(0,0,0,.9);}
+  .eyebrow{font-size:15px; font-weight:800; font-family:var(--display); color:var(--text); display:flex; align-items:center; gap:9px; margin-bottom:16px}
+  .eyebrow .tag{margin-left:auto; font-size:12px; font-weight:500; color:var(--faint); font-family:var(--sans)}
+
+  /* period pill */
+  .period{display:flex; gap:6px; background:#0d1321; border:1px solid var(--line); border-radius:var(--r-md); padding:5px; margin-bottom:14px; box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+  .period button{flex:1; padding:11px 4px; font-size:13px; font-weight:800; border:none; border-radius:var(--r-sm); background:transparent; color:var(--muted); cursor:pointer; transition:.25s; font-family:var(--sans)}
+  .period button.active{background:var(--accent); color:var(--ink-on-accent); box-shadow:0 12px 22px -13px var(--accent-glow)}
+
+  /* hero gauge */
+  .hero{position:relative; background:linear-gradient(180deg,#171d31,#101625);
+    border:1px solid var(--line); border-radius:var(--r-lg); padding:20px 18px 18px; margin-bottom:12px; overflow:hidden;
+    box-shadow:0 34px 70px -42px rgba(0,0,0,.95);}
+  .hero::before{content:""; position:absolute; inset:0; opacity:.12; pointer-events:none;
+    background-image:
+      repeating-radial-gradient(circle at 50% 128%, transparent 0, transparent 78px, rgba(255,255,255,.5) 79px, transparent 80px),
+      linear-gradient(rgba(255,255,255,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.14) 1px,transparent 1px);
+    background-size:auto, 28px 28px, 28px 28px;
+    -webkit-mask-image:radial-gradient(120% 100% at 50% 10%, #000 30%, transparent 78%); mask-image:radial-gradient(120% 100% at 50% 10%, #000 30%, transparent 78%);}
+  .hero > *{position:relative; z-index:1}
+  .hero-heading{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:4px}
+  .hero-kicker{font-size:12px; color:var(--accent2); font-weight:800}
+  .hero-heading h2{font-family:var(--display); font-size:21px; line-height:1.15; margin-top:3px}
+  .hero-period{font-size:12px; color:var(--muted); background:var(--surface3); border:1px solid var(--line2); border-radius:var(--r-sm); padding:7px 9px; white-space:nowrap}
+
+  /* carro 3D real: o GLB é exportado do Blender e orbitado no Three.js */
+  .car-wrap{position:relative; height:210px; margin:0 -8px; background:radial-gradient(ellipse at 50% 55%,#30353e 0%,#1b2029 48%,transparent 75%)}
+  #prisma3d{position:absolute; inset:0; z-index:2; width:100%; height:100%; display:block; opacity:0; transition:opacity .35s ease; cursor:grab; touch-action:none}
+  #prisma3d:active{cursor:grabbing}
+  .car-wrap.webgl-ready #prisma3d{opacity:1}
+  .model-hint{text-align:center; color:#b3bac7; font-size:11px; margin:0; min-height:18px}
+  .car-caption{display:flex; justify-content:space-between; align-items:center; gap:10px; font-size:12px; color:#c1c7d1; margin:0 0 12px}
+  .car-caption strong{display:block; color:var(--text); font-size:13px}
+  .car-tools{display:flex; gap:4px}
+  .car-tools button{width:44px; height:44px; color:var(--text); background:rgba(255,255,255,.045); border:1px solid var(--line); border-radius:10px; font-size:20px; cursor:pointer}
+  .car-tools button:focus-visible,#prisma3d:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+  .car-tools button:disabled{opacity:.35; cursor:wait}
+  .hero::before{display:none}
+  .car-wrap.model-error::after{content:'modelo 3D indisponível'; position:absolute; inset:0; display:grid; place-items:center; color:var(--muted); font-size:12px; pointer-events:none}
+
+  .gauge{position:relative; width:100%; max-width:280px; margin:0 auto}
+  .gauge svg{display:block; width:100%; overflow:visible}
+  .prisma-gauge{--prisma-cyan:#00D8FF;--prisma-red:#FF2732;--prisma-white:#F4F8FA;--prisma-metal:#5D6870;max-width:none;width:100%;margin:0;position:relative}
+  .prisma-gauge svg{display:block;width:100%;aspect-ratio:4/3;overflow:visible}
+  .prisma-gauge .dial-face{fill:#202328}
+  .prisma-gauge .dial-bezel{fill:none;stroke:#090B0E;stroke-width:24;stroke-linecap:round;filter:drop-shadow(0 7px 10px rgba(0,0,0,.55))}
+  .prisma-gauge .dial-recess{fill:none;stroke:#33383D;stroke-width:15;stroke-linecap:round}
+  .prisma-gauge .zone-base{fill:none;stroke-width:13;stroke-linecap:butt;opacity:.3}
+  .prisma-gauge .zone-base.zone-cyan{stroke:var(--prisma-cyan);filter:drop-shadow(0 0 6px rgba(0,216,255,.45))}
+  .prisma-gauge .scale-segment{stroke:#080B0E;stroke-width:.9;stroke-linejoin:round}
+  .prisma-gauge .scale-segment.zone-cyan{fill:var(--prisma-cyan);filter:drop-shadow(0 0 4px rgba(0,216,255,.7))}
+  .prisma-gauge .scale-segment.major{stroke:var(--prisma-white);stroke-width:1.35}
+  .prisma-gauge .scale-label{fill:var(--prisma-white);font-family:var(--display);font-size:14px;font-weight:800;filter:drop-shadow(0 0 3px rgba(244,248,250,.35))}
+  .prisma-gauge .needle-assembly{transition:transform .72s cubic-bezier(.16,1,.3,1)}
+  .prisma-gauge .needle-blade{fill:var(--prisma-red);stroke:#B71925;stroke-width:.85;filter:none}
+  .prisma-gauge .needle-hub-outer{fill:#11151A;stroke:var(--prisma-metal);stroke-width:2.4}
+  .prisma-gauge .needle-hub-inner{fill:#2A3036;stroke:#090B0E;stroke-width:1.5}
+  .prisma-gauge .needle-hub-cap{fill:#0B0E12;stroke:#737E86;stroke-width:1}
+  .prisma-gauge .g-digital-label{color:var(--muted)}
+  .g-center{position:relative; text-align:center; margin-top:-6px}
+  .g-center .lbl{font-size:13px; color:var(--muted); font-weight:500}
+  .g-center .val{font-family:var(--display); font-size:44px; font-weight:800; line-height:1.1; margin:4px 0 6px; color:var(--text)}
+  .g-center .meta{font-size:13px; color:var(--muted); display:flex; gap:7px; justify-content:center; align-items:center}
+  .g-center .meta b{color:var(--accent2); font-weight:700}
+  .g-center .meta button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;padding:2px; min-height:44px; min-width:44px}
+  .g-center .setmeta{background:var(--surface3); border:1px solid var(--accent-glow);color:var(--accent2);cursor:pointer;font-size:13px;font-weight:800;padding:9px 16px;border-radius:var(--r-sm)}
+  .flow{display:flex; gap:8px; margin-top:18px; padding-top:0}
+  .flow > div{flex:1; text-align:center; background:#0e1422; border:1px solid var(--line); border-radius:var(--r-sm); padding:12px 8px}
+  .flow .k{font-size:12.5px; color:var(--muted); font-weight:500}
+  .flow .v{font-family:var(--display); font-size:21px; font-weight:800; margin-top:6px}
+  .flow .v.in{color:var(--accent2)} .flow .v.out{color:var(--rose)}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px}
+  .stat{display:flex; align-items:center; gap:10px; min-height:78px; background:linear-gradient(180deg,var(--surface),var(--bg2)); border:1px solid var(--line); border-radius:var(--r-sm); padding:12px}
+  .stat-ic{width:38px;height:38px;border-radius:var(--r-sm);background:var(--surface3);display:grid;place-items:center;color:var(--accent);flex-shrink:0}
+  .stat-txt{flex:1; min-width:0}
+  .stat .k{font-size:11.5px; color:var(--muted); font-weight:500}
+  .stat .v{font-family:var(--display); font-size:19px; font-weight:800; margin-top:5px}
+  .stat .v.gold{color:var(--accent2)} .stat .v.rose{color:var(--rose)}
+  .stat .foot{font-size:11px; color:var(--faint); margin-top:2px}
+
+  .quick-actions{display:grid; gap:10px; margin:0 0 16px}
+  .quick-action{display:flex; align-items:center; gap:12px; min-height:64px; padding:12px; border:1px solid var(--line); border-radius:var(--r-md); background:var(--surface); color:var(--text); text-align:left; cursor:pointer; font-family:var(--sans); transition:transform .18s, border-color .18s, background .18s}
+  .quick-action:active{transform:translateY(1px); border-color:var(--line2)}
+  .quick-action:focus-visible,.btn:focus-visible,.period button:focus-visible,.dock button:focus-visible,.icon-btn:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+  .quick-action--primary{background:var(--accent); color:var(--ink-on-accent); border-color:transparent; box-shadow:0 18px 30px -20px var(--accent-glow)}
+  .quick-action--primary .quick-icon{background:rgba(36,16,14,.14); color:var(--ink-on-accent)}
+  .quick-action--primary small{color:rgba(36,16,14,.7)}
+  .quick-icon{width:38px; height:38px; flex:0 0 38px; display:grid; place-items:center; border-radius:var(--r-sm); background:var(--surface3); color:var(--accent)}
+  .quick-action b{display:block; font-size:14px; line-height:1.2}
+  .quick-action small{display:block; margin-top:4px; color:var(--muted); font-size:11.5px}
+  .quick-arrow{margin-left:auto; color:currentColor; opacity:.6}
+  .quick-action-row{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+  .quick-action-row .quick-action{align-items:flex-start; min-height:92px; flex-wrap:wrap}
+  .quick-action-row .quick-arrow{margin-top:10px}
+  .quick-action-row .quick-copy{width:calc(100% - 50px)}
+  .recent-card{padding-top:8px; padding-bottom:8px}
+  .recent-card .item{margin:0 -1px 8px; cursor:pointer}
+  .recent-card .item:last-child{margin-bottom:0}
+  .section-label.compact{margin-top:20px; margin-bottom:9px}
+  .section-label.compact .tag{margin-left:auto; color:var(--muted); font-size:11.5px; font-weight:600}
+
+  .plat{padding:13px 0; border-bottom:1px solid var(--line)}
+  .plat:last-child{border-bottom:none; padding-bottom:2px}
+  .plat .head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:9px}
+  .plat .name{display:flex; align-items:center; gap:10px; font-weight:700; font-size:14px}
+  .swatch{width:9px;height:9px;border-radius:50%}
+  .plat .amt{font-family:var(--display); font-size:16px; font-weight:700}
+  .plat .pct{font-size:11.5px; color:var(--faint); margin-left:6px}
+  .track{height:7px; background:#0e1422; border-radius:999px; overflow:hidden}
+  .fill{height:100%; border-radius:999px; transition:width 1s cubic-bezier(.2,.8,.2,1)}
+
+  .eff-row{display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--line); font-size:14px}
+  .eff-row:last-child{border-bottom:none}
+  .eff-row .l{color:var(--muted)}
+  .eff-row b{font-family:var(--display); font-size:16px; font-weight:700}
+
+  /* forms */
+  label{display:block; font-size:12.5px; color:var(--muted); margin-bottom:9px; font-weight:600}
+  .field{margin-bottom:16px}
+  input,select,textarea{width:100%; padding:15px 14px; font-size:16px; border:1px solid var(--line2); border-radius:var(--r-sm); background:var(--surface3); color:var(--text); font-family:inherit; outline:none; transition:.18s}
+  input.money,input.count{font-family:var(--display); font-size:19px; font-weight:700}
+  input:focus,select:focus,textarea:focus{border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+  .row{display:flex; gap:12px} .row>*{flex:1}
+  .prefix{position:relative}
+  .prefix span{position:absolute; left:15px; top:50%; transform:translateY(-50%); color:var(--faint); font-family:var(--display); font-weight:700; pointer-events:none}
+  .prefix input{padding-left:40px}
+
+  /* segmented app picker (ride-card style) */
+  .seg{display:flex; gap:9px; margin-bottom:18px}
+  .seg button{flex:1; padding:15px 6px; border:1.5px solid var(--line2); border-radius:var(--r-sm); background:var(--surface3); color:var(--muted); font-size:14px; font-weight:800; cursor:pointer; transition:.2s; position:relative; font-family:var(--sans)}
+  .seg button[data-app="99"]{--app-color:var(--p99)}
+  .seg button[data-app="uber"]{--app-color:var(--puber)}
+  .seg button[data-app="indrive"]{--app-color:var(--pindrive)}
+  .seg button .sw{display:block; width:9px; height:9px; border-radius:50%; margin:0 auto 9px; background:var(--app-color,var(--line2)); transition:.2s}
+  .seg button.active{color:var(--text); border-color:var(--sel,var(--accent));
+    background:linear-gradient(180deg, color-mix(in srgb, var(--sel,var(--accent)) 18%, var(--surface3)), var(--surface3));
+    box-shadow:0 10px 20px -12px var(--sel,var(--accent))}
+  .seg button.active .sw{background:var(--sel,var(--accent)); box-shadow:0 0 10px var(--sel,var(--accent))}
+
+  .btn{display:flex; align-items:center; justify-content:center; gap:9px; width:100%; padding:16px; font-size:15px; font-weight:900; border:none; border-radius:var(--r-sm); cursor:pointer;
+    color:var(--ink-on-accent); background:var(--accent); font-family:var(--display);
+    box-shadow:0 14px 30px -14px var(--accent-glow)}
+  .btn:active{transform:translateY(1px)}
+  .btn.sec{background:var(--surface3); color:var(--text); box-shadow:inset 0 0 0 1px var(--line2)}
+  .btn.danger{background:var(--rose-soft); color:var(--rose); box-shadow:inset 0 0 0 1px rgba(255,92,115,.3)}
+  .btn.ghost{background:none; color:var(--muted); box-shadow:none; font-weight:600; font-family:var(--sans)}
+  .sub-actions{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px}
+  .sub-actions .btn{padding:13px 10px; font-size:13px}
+
+  .section-label{font-size:14px; font-weight:800; font-family:var(--display); color:var(--text); margin:24px 4px 13px; display:flex; align-items:center; gap:10px}
+
+  .item{display:flex; align-items:center; gap:12px; padding:12px; background:linear-gradient(180deg,var(--surface),var(--bg2)); border:1px solid var(--line); border-radius:var(--r-sm); margin-bottom:10px}
+  .item:active{border-color:var(--line2)}
+  .item .badge{min-width:50px; padding:8px 4px; border-radius:var(--r-sm); text-align:center; border:1px solid var(--line2); background:var(--surface3); flex-shrink:0}
+  .item .badge .n{font-family:var(--display); font-size:17px; font-weight:800; line-height:1; display:block}
+  .item .badge .u{font-size:9px; text-transform:uppercase; color:var(--faint); margin-top:2px; display:block; letter-spacing:.4px}
+  .item .info{flex:1; min-width:0; padding-left:2px}
+  .item .info .t{font-weight:700; font-size:14.5px}
+  .item .info .d{font-size:12px; color:var(--muted); margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .item .right{text-align:right; flex-shrink:0}
+  .item .a{font-family:var(--display); font-size:16px; font-weight:800}
+  .item .a.in{color:var(--accent2)} .item .a.out{color:var(--rose)}
+  .item .x{background:none;border:none;color:var(--faint);font-size:11px;cursor:pointer;padding:4px 0 0}
+  .item .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:4px}
+
+  .empty{text-align:center; color:var(--muted); padding:44px 16px}
+  .empty .mk{width:54px;height:54px;margin:0 auto 14px;border-radius:var(--r-sm);background:var(--surface3);border:1px solid var(--line2);display:grid;place-items:center;color:var(--accent)}
+  .empty .t{font-weight:700; color:var(--text)}
+  .empty .s{font-size:12.5px; margin-top:6px; color:var(--muted)}
+
+  /* ----- assistente em conversa ----- */
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .assistant-fab{position:fixed; right:18px; bottom:calc(118px + env(safe-area-inset-bottom)); z-index:60;
+    width:60px; height:60px; border-radius:30px; border:1px solid var(--accent2); background:var(--accent);
+    color:var(--ink-on-accent); display:flex; align-items:center; justify-content:center; cursor:pointer;
+    box-shadow:0 8px 20px -6px rgba(0,0,0,.6)}
+  .assistant-fab .ic{width:27px;height:27px;stroke:var(--ink-on-accent);stroke-width:2}
+  .assistant-fab:active{transform:scale(.94)}
+
+  .chat-bg{align-items:flex-end; padding:0}
+  .chat{width:100%; max-width:520px; margin:0 auto; height:min(88vh,880px); background:#0f1720;
+    border:1px solid var(--line); border-bottom:0; border-top-left-radius:22px; border-top-right-radius:22px;
+    display:flex; flex-direction:column; overflow:hidden}
+  .chat-head{display:flex; align-items:center; gap:11px; padding:14px 16px; border-bottom:1px solid var(--line); flex-shrink:0}
+  .chat-avatar{display:flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:20px;
+    background:var(--accent-soft); border:1px solid #1d5568; flex-shrink:0}
+  .chat-avatar .ic{width:21px;height:21px;stroke:var(--accent)}
+  .chat-who{flex:1; min-width:0}
+  .chat-who b{display:block; font-family:var(--display); font-size:21px; letter-spacing:-.3px}
+  .chat-who small{display:block; font-size:12px; color:var(--muted)}
+  .chat-x{width:44px; height:44px; border-radius:22px; border:1px solid var(--line); background:var(--surface);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer}
+  .chat-x .ic{width:18px;height:18px;stroke:var(--muted)}
+
+  .chat-body{flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:18px 16px;
+    display:flex; flex-direction:column; gap:14px}
+  .bolha{max-width:82%; padding:12px 14px; border-radius:16px; font-size:16px; line-height:1.45; white-space:pre-wrap}
+  .bolha.deles{align-self:flex-start; background:var(--surface); border:1px solid var(--line); border-bottom-left-radius:5px}
+  .bolha.minha{align-self:flex-end; background:var(--accent-soft); border:1px solid #1d5568; border-bottom-right-radius:5px}
+  .bolha.aviso{border-color:#5a3a20}
+  .bolha.erro{border-color:var(--rose)}
+  .bolha.larga{max-width:92%; display:flex; flex-direction:column; gap:12px}
+  .bolha.bolha-print{padding:5px; overflow:hidden; display:flex; flex-direction:column; gap:6px; max-width:66%}
+  .bolha.bolha-print a{display:block; border-radius:12px; overflow:hidden}
+  .bolha.bolha-print a:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+  .bolha.bolha-print img{display:block; width:100%; height:auto}
+  .bolha.bolha-print span{padding:0 7px 4px; font-size:14px; line-height:1.4}
+  .bolha.pensando{display:flex; gap:5px; align-items:center; padding:15px 16px}
+  .bolha.pensando i{width:7px; height:7px; border-radius:4px; background:var(--faint); animation:pulsa 1.1s infinite}
+  .bolha.pensando i:nth-child(2){animation-delay:.18s}
+  .bolha.pensando i:nth-child(3){animation-delay:.36s}
+  @keyframes pulsa{0%,60%,100%{opacity:.3}30%{opacity:1}}
+
+  .chat-exemplos{display:flex; flex-direction:column; gap:8px; align-self:flex-start; max-width:92%}
+  .chat-exemplos .k{font-size:12px; font-weight:800; letter-spacing:1px; color:var(--muted); text-transform:uppercase; padding-left:2px}
+  .chat-exemplos p{margin:0; color:var(--muted); font-size:16px; line-height:1.5; padding-left:2px}
+  .chat-exemplos p::before{content:"“"} .chat-exemplos p::after{content:"”"}
+
+  .previa{display:flex; align-items:center; gap:11px; background:var(--bg2); border:1px solid var(--line2);
+    border-radius:12px; padding:11px 12px}
+  .previa .sel{display:flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:9px;
+    background:var(--surface); border:1px solid var(--line2); font-size:12px; font-weight:800; flex-shrink:0}
+  .previa .txt{flex:1; min-width:0}
+  .previa .txt b{display:block; font-size:16px}
+  .previa .txt small{display:block; font-size:12px; color:var(--muted)}
+  .previa .val{font-size:16px; font-weight:800}
+  .previa .val.in{color:var(--emerald)} .previa .val.out{color:var(--rose)}
+  .chat-acoes{display:flex; gap:9px}
+  .chat-acoes button{min-height:48px; border-radius:14px; font-size:16px; font-weight:800; font-family:inherit; cursor:pointer}
+  .chat-acoes .ok{flex:1; border:1px solid var(--accent2); background:var(--accent); color:var(--ink-on-accent)}
+  .chat-acoes .nao{padding:0 18px; border:1px solid var(--line2); background:var(--bg2); color:var(--text); font-weight:700}
+  .chat-acoes .app{flex:1; padding:0}
+  .chat-manual{width:100%; min-height:48px; border-radius:14px; border:1px solid var(--line2); background:var(--bg2);
+    color:var(--text); font-size:16px; font-weight:700; font-family:inherit; cursor:pointer}
+
+  .chat-bar{display:flex; align-items:center; gap:9px; padding:12px 14px calc(22px + env(safe-area-inset-bottom));
+    border-top:1px solid var(--line); background:#0f1720; flex-shrink:0}
+  .chat-bar input{flex:1; min-height:48px; background:var(--surface); border:1px solid var(--line2);
+    border-radius:24px; color:var(--text); font-size:16px; padding:0 18px; font-family:inherit}
+  .chat-icon{width:48px; height:48px; border-radius:24px; border:1px solid var(--line2); background:var(--surface);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer; color:var(--muted)}
+  .chat-icon .ic{width:21px;height:21px;stroke:currentColor;stroke-width:2}
+  .chat-icon.chat-send{border-color:var(--accent2); background:var(--accent); color:var(--ink-on-accent)}
+  .chat-icon.chat-drop{color:var(--rose)}
+  .chat-icon:disabled{opacity:.45; cursor:default}
+  .chat-bar:has(input:disabled){opacity:.55}
+
+  .chat-rec{display:flex; align-items:center; gap:11px; margin:12px 14px calc(22px + env(safe-area-inset-bottom));
+    background:var(--bg2); border:1px solid var(--line2); border-radius:24px; padding:8px 10px 8px 16px; flex-shrink:0}
+  .chat-rec[hidden]{display:none}
+  .chat-wave{flex:1; display:flex; align-items:center; justify-content:center; gap:3px; height:34px}
+  /* A onda do WhatsApp nao mostra o som de agora: mostra o que ja foi falado.
+     Barra nova entra pela direita e as velhas ficam PARADAS, andando para a
+     esquerda. Foi isso que faltou nas duas primeiras tentativas — mexer todas
+     as barras a cada instante da aquele efeito quadriculado, de bloco
+     piscando. A transicao dura o mesmo que o passo, para o andar ser continuo
+     em vez de aos trancos. */
+  /* A ponta da barra e redonda porque a ALTURA e de verdade, em px.
+     Antes eu arredondava com border-radius e logo depois esmagava a barra com
+     transform:scaleY — e o scaleY esmaga o arredondamento junto: um canto de
+     1px virava 0,07px, ou seja, canto reto. Era dai que vinha o aspecto
+     quadrado, por mais que o codigo dissesse "border-radius". */
+  .chat-wave i{width:2px; height:2px; border-radius:99px; background:var(--muted);
+    flex-shrink:0; opacity:.55;
+    transition:height 70ms linear, opacity 70ms linear}
+  /* O relatorio era um bloco de texto corrido: o numero que o motorista pediu
+     tinha o mesmo peso de tudo que ele nao pediu. Agora o pedido vem grande e
+     o resto fica fechado num <details>. */
+  .bolha.relatorio{white-space:normal; gap:10px; padding:0; background:none; border:0; width:100%; max-width:100%}
+  .rel-foco,.rel-geral{background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:15px 15px 14px; display:flex; flex-direction:column; gap:13px}
+  .rel-topo{display:flex; align-items:center; gap:10px}
+  .rel-rotulo{flex:1; min-width:0; font-size:12px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--muted)}
+  .rel-selo{flex-shrink:0; font-size:11px; font-weight:600; color:var(--muted); background:var(--surface2); border-radius:999px; padding:5px 11px}
+  .rel-numero{display:block; font-family:var(--display); font-size:38px; font-weight:600; letter-spacing:-1.4px; line-height:1.1; font-variant-numeric:tabular-nums}
+  .rel-saldo{color:var(--emerald)}
+  .rel-sub{display:block; font-size:12.5px; color:var(--muted); margin-top:4px}
+  .rel-par{display:flex; gap:10px}
+  .rel-par>div{flex:1; min-width:0; background:var(--bg2); border:1px solid var(--line); border-radius:15px; padding:11px 12px}
+  .rel-par span{display:block; font-size:11.5px; color:var(--muted)}
+  .rel-par b{display:block; font-size:18px; font-weight:600; letter-spacing:-.4px; font-variant-numeric:tabular-nums; margin-top:4px}
+  .rel-chips>div{display:flex; align-items:baseline; gap:7px}
+  .rel-chips b{font-size:17px; margin-top:0}
+  .rel-secao{display:flex; flex-direction:column; gap:11px; border-top:1px solid var(--line); padding-top:13px}
+  .rel-secao h4{margin:0; font-size:12px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--muted)}
+  .rel-linha-topo{display:flex; align-items:baseline; gap:10px; font-size:14px}
+  .rel-linha-topo span{flex:1; min-width:0; font-weight:600}
+  .rel-linha-topo b{flex-shrink:0; font-weight:600; font-variant-numeric:tabular-nums}
+  .rel-barra{height:8px; border-radius:999px; background:var(--surface2); margin-top:7px; display:flex; overflow:hidden}
+  .rel-barra i{border-radius:999px; background:var(--accent); min-width:9px}
+  .rel-fatia{border-top:1px solid var(--line); padding-top:12px}
+  .rel-fatia .rel-linha-topo{font-size:12.5px; color:var(--muted)}
+  .rel-fatia .rel-linha-topo span{font-weight:400}
+  .rel-fatia .rel-linha-topo b{color:var(--accent)}
+  .rel-mais summary{list-style:none; cursor:pointer; min-height:44px; display:flex; align-items:center; justify-content:center; gap:7px;
+    border:1px solid var(--line); border-radius:999px; background:var(--surface); color:var(--accent2); font-size:12.5px; font-weight:600}
+  .rel-mais summary::-webkit-details-marker{display:none}
+  .rel-mais[open] summary{margin-bottom:10px}
+  .chat-time{font-family:var(--display); font-size:16px; font-weight:800; font-variant-numeric:tabular-nums; flex-shrink:0}
+  @media (prefers-reduced-motion:reduce){
+    .bolha.pensando i{animation:none}
+  }
+
+  .chips{display:flex; gap:9px; flex-wrap:wrap; margin-bottom:18px}
+  .chip{padding:11px 15px; border-radius:var(--r-sm); border:1.5px solid var(--line2); background:var(--surface3); font-size:13.5px; font-weight:700; cursor:pointer; color:var(--muted)}
+  .chip.active{border-color:var(--accent); color:var(--accent2); background:var(--accent-soft)}
+
+  .report-intro{color:var(--muted); font-size:13px; margin:-4px 4px 14px; line-height:1.5}
+  .report-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px}
+  .report-stat{background:linear-gradient(180deg,var(--surface),var(--bg2)); border:1px solid var(--line); border-radius:var(--r-sm); padding:14px; min-height:92px}
+  .report-stat .k{font-size:11.5px; color:var(--muted)}
+  .report-stat .v{font-family:var(--display); font-size:21px; font-weight:800; margin-top:8px}
+  .report-stat .v.accent{color:var(--accent2)}
+  .report-stat .v.rose{color:var(--rose)}
+  .report-stat--wide{grid-column:1/-1; min-height:0}
+  .report-note{display:flex; justify-content:space-between; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--line); font-size:13.5px; color:var(--muted)}
+  .report-note:last-child{border-bottom:none}
+  .report-note b{color:var(--text); font-family:var(--display); font-size:15px}
+
+  nav.dock{position:fixed; bottom:calc(10px + env(safe-area-inset-bottom)); left:50%; transform:translateX(-50%); width:min(calc(100% - 24px),430px); z-index:40; display:flex; gap:4px; padding:6px;
+    background:rgba(13,19,33,.94); border:1px solid var(--line2); border-radius:var(--r-lg); box-shadow:0 24px 60px -30px #000; backdrop-filter:blur(14px)}
+  nav.dock button{flex:1; background:none; border:none; border-radius:var(--r-md); padding:10px 0 8px; color:var(--faint); cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px; font-size:10px; font-weight:800; letter-spacing:0; position:relative; font-family:var(--sans)}
+  nav.dock button.active{background:var(--accent); color:var(--ink-on-accent)}
+  nav.dock button.active::before{content:none}
+
+  .modal-bg{position:fixed; inset:0; background:#000c; backdrop-filter:blur(6px); z-index:100; display:none; align-items:flex-end; justify-content:center}
+  .modal-bg.show{display:flex}
+  .modal{background:var(--surface); width:100%; max-width:430px; border:1px solid var(--line2); border-bottom:none; border-radius:18px 18px 0 0; padding:24px 18px calc(24px + env(safe-area-inset-bottom)); max-height:90vh; overflow-y:auto; animation:up .32s ease}
+  .modal h3{font-family:var(--display); font-size:20px; font-weight:800; margin-bottom:16px}
+  .mini{font-size:12.5px; color:var(--muted); margin-bottom:18px; line-height:1.6}
+  [hidden]{display:none!important}
+  .auth-status{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:11px;margin-bottom:16px}
+  .auth-status::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  .auth-status[data-state="offline"]::before{background:#f3c969}
+  .auth-status[data-state="error"]::before{background:var(--rose)}
+  .auth-form{display:grid;gap:12px}
+  .auth-form .btn{width:100%}
+  .auth-divider{display:flex;align-items:center;gap:10px;color:var(--faint);font-size:11px;margin:15px 0}
+  .auth-divider::before,.auth-divider::after{content:"";height:1px;background:var(--line);flex:1}
+  .auth-feedback{min-height:22px;margin-top:12px;color:var(--muted);font-size:12px;line-height:1.45}
+  .auth-feedback[data-error="true"]{color:#ff8e96}
+  .auth-account{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r-md);padding:14px;margin-bottom:14px}
+  .auth-account strong{display:block;color:var(--text);font-size:14px;margin-bottom:4px}
+  .auth-account span{color:var(--muted);font-size:12px;word-break:break-word}
+  .auth-settings{margin-bottom:14px}
+  .auth-settings-label{display:block;color:var(--muted);font-size:12px;margin-bottom:8px}
+
+  .toast{position:fixed; bottom:calc(108px + env(safe-area-inset-bottom)); left:50%; transform:translateX(-50%) translateY(18px); background:var(--surface3); color:var(--accent2); border:1px solid var(--accent); padding:13px 20px; border-radius:var(--r-sm); font-size:13.5px; font-weight:800; z-index:200; opacity:0; transition:.28s; pointer-events:none}
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+  @media (max-width:360px){
+    main{padding-left:12px; padding-right:12px}
+    .hero{padding-left:14px; padding-right:14px}
+    .quick-action-row{grid-template-columns:1fr}
+    .quick-action-row .quick-action{min-height:64px; align-items:center; flex-wrap:nowrap}
+    .quick-action-row .quick-arrow{margin-top:0}
+    .quick-action-row .quick-copy{width:auto}
+    .report-grid{grid-template-columns:1fr}
+    .report-stat--wide{grid-column:auto}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{scroll-behavior:auto!important; animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important}
+  }
+</style>
+<link rel="stylesheet" href="./assets/cockpit.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <div class="mark">SF</div>
+    <div><h1>Saldo Final</h1><div class="tagline" id="tagline">Controle e saldo do motorista</div></div>
+  </div>
+  <div class="top-actions">
+    <button class="account-btn" data-open-auth type="button">Entrar</button>
+  </div>
+</header>
+
+<main>
+  <!-- ===================== RESUMO ===================== -->
+  <section id="view-resumo" class="view active">
+    <div class="vehicle-stage">
+      <div class="hero-heading">
+        <div><h2>Chevrolet Prisma</h2><p>LT · 2015 · Prata</p></div>
+      </div>
+      <div class="car-wrap">
+        <canvas id="prisma3d" tabindex="0" aria-label="Modelo 3D do Chevrolet Prisma LT 2015. Arraste ou use as setas para girar."></canvas>
+      </div>
+      <div class="car-caption">
+        <p class="model-hint" id="carStatus" role="status">Carregando seu carro…</p>
+        <div class="car-tools" aria-label="Controles do carro">
+          <button type="button" data-car-action="out" aria-label="Afastar carro" disabled>−</button>
+          <button type="button" data-car-action="in" aria-label="Aproximar carro" disabled>+</button>
+          <button type="button" data-car-action="reset" aria-label="Restaurar vista do carro" disabled>↺</button>
+        </div>
+      </div>
+    </div>
+    <div class="period">
+      <button data-p="dia" class="active" onclick="setPeriod('dia')">Hoje</button>
+      <button data-p="semana" onclick="setPeriod('semana')">Semana</button>
+      <button data-p="mes" onclick="setPeriod('mes')">Mês</button>
+      <button data-p="tudo" onclick="setPeriod('tudo')">Tudo</button>
+    </div>
+    <div class="drive-readouts">
+      <div><strong class="fig number-value" id="gVal">R$ 0</strong><span>Saldo final · <span id="gLead">hoje</span></span></div>
+      <div><strong class="fig number-value" id="distanceValue">0 <small>km</small></strong><span>Distância rodada</span></div>
+    </div>
+    <div class="cockpit-grid">
+    <div class="hero goal-panel">
+      <div class="goal-heading">Sua meta <span id="heroPeriod">hoje</span><span class="goal-chip" id="goalState" hidden></span></div>
+      <strong id="goalProgress" class="goal-progress fig number-value">—</strong>
+      <div class="gauge prisma-gauge" data-financial-gauge data-gauge-state="empty" aria-label="Progresso da meta financeira · de 0 a 100% da meta">
+        <svg viewBox="0 0 320 230" role="img" aria-labelledby="gaugeTitle gaugeDesc">
+          <title id="gaugeTitle">Progresso da meta financeira</title>
+          <desc id="gaugeDesc">O ponteiro vai de 0 a 100% da meta conforme o lucro líquido do período se aproxima dela.</desc>
+          <clipPath id="dialClip"><rect x="-30" y="-10" width="380" height="238" /></clipPath>
+          <g class="dial-shell" clip-path="url(#dialClip)" aria-hidden="true">
+            <circle class="dial-face" cx="160" cy="156" r="142" />
+            <path class="dial-bezel" d="M 31 216 A 142 142 0 1 1 289 216" />
+            <path class="dial-recess" d="M 40 212 A 132 132 0 1 1 280 212" />
+          </g>
+          <g class="scale-zones" aria-hidden="true">
+            <path class="zone-base zone-cyan" d="M 42 211 A 130 130 0 1 1 278 211" pathLength="100" stroke-dasharray="77.5 22.5" />
+            <path class="zone-base zone-goal" d="M 42 211 A 130 130 0 1 1 278 211" pathLength="100" stroke-dasharray="22.5 77.5" stroke-dashoffset="-77.5" />
+          </g>
+          <g class="scale-segments" data-gauge-segments aria-hidden="true"></g>
+          <g class="scale-labels" data-gauge-labels aria-hidden="true"></g>
+          <text class="scale-unit" x="160" y="200" text-anchor="middle" aria-hidden="true">% DA META</text>
+          <g class="needle-assembly" id="needleGroup" transform="rotate(245 160 156)">
+            <path class="needle-blade" id="needle" d="M 156.65 156 L 158.25 61 Q 158.45 56.5 159.45 52 Q 160.45 56.5 160.7 61 L 161.7 156 Z" />
+            <circle class="needle-hub-outer" cx="160" cy="156" r="14" />
+            <circle class="needle-hub-inner" cx="160" cy="156" r="7" />
+            <circle class="needle-hub-cap" cx="160" cy="156" r="3" />
+          </g>
+        </svg>
+        <div class="g-digital" data-gauge-digital>
+          <span class="g-digital-label">progresso da meta</span>
+          <strong id="gaugeDigitalValue" class="number-value">R$ 0</strong>
+        </div>
+        <div class="g-center">
+          <div class="meta" id="gMeta"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-actions reveal motion-stagger" style="animation-delay:.08s">
+      <button class="quick-action quick-action--primary" onclick="showView('dia')">
+        <span class="quick-icon"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
+        <span class="quick-copy"><b>Nova corrida</b><small>Registrar o fechamento do dia</small></span>
+        <svg class="ic quick-arrow" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+      </button>
+      <div class="quick-action-row">
+        <button class="quick-action" onclick="showView('fuel')">
+          <span class="quick-icon"><svg class="ic" viewBox="0 0 24 24"><path d="M6 21V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v15M4.5 21h11.5M8 10h4"/><path d="M14 7.5l2.6 2.6a1.6 1.6 0 0 1 .4 1V16a1.5 1.5 0 0 0 3 0V8.5"/></svg></span>
+          <span class="quick-copy"><b>Abastecer</b><small>Combustível</small></span>
+          <svg class="ic quick-arrow" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+        <button class="quick-action" onclick="showView('exp')">
+          <span class="quick-icon"><svg class="ic" viewBox="0 0 24 24"><path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9.5 8.5h5M9.5 12h5"/></svg></span>
+          <span class="quick-copy"><b>Nova despesa</b><small>Custos do dia</small></span>
+          <svg class="ic quick-arrow" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    </div>
+    <div class="flow">
+      <div><div class="k">Entradas</div><div class="v in fig number-value" id="fIn">R$ 0</div></div>
+      <div><div class="k">Saídas</div><div class="v out fig number-value" id="fOut">R$ 0</div></div>
+    </div>
+    <div class="grid2">
+      <div class="stat reveal" style="animation-delay:.1s">
+        <div class="stat-ic"><svg class="ic" viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg></div>
+        <div class="stat-txt"><div class="k">Ganho por km</div><div class="v gold fig number-value" id="sKm">—</div><div class="foot" id="sKmF">—</div></div>
+      </div>
+      <div class="stat reveal" style="animation-delay:.14s">
+        <div class="stat-ic"><svg class="ic" viewBox="0 0 24 24" style="width:20px;height:20px"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></div>
+        <div class="stat-txt"><div class="k">Ganho por hora</div><div class="v gold fig number-value" id="sHr">—</div><div class="foot" id="sHrF">—</div></div>
+      </div>
+      <div class="stat reveal" style="animation-delay:.18s">
+        <div class="stat-ic"><svg class="ic" viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M6 21V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v15M4.5 21h11.5M8 10h4"/><path d="M14 7.5l2.6 2.6a1.6 1.6 0 0 1 .4 1V16a1.5 1.5 0 0 0 3 0V8.5"/></svg></div>
+        <div class="stat-txt"><div class="k">Combustível</div><div class="v rose fig number-value" id="sFuel">R$ 0</div><div class="foot" id="sFuelF">—</div></div>
+      </div>
+      <div class="stat reveal" style="animation-delay:.22s">
+        <div class="stat-ic"><svg class="ic" viewBox="0 0 24 24" style="width:20px;height:20px"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.4"/><path d="M12 9.6V3.5M9.9 13.6l-4.7 3.6M14.1 13.6l4.7 3.6"/></svg></div>
+        <div class="stat-txt"><div class="k">Corridas</div><div class="v fig number-value" id="sRides">0</div><div class="foot" id="sRidesF">—</div></div>
+      </div>
+    </div>
+
+    <div class="section-label compact">Lançamentos recentes <span class="tag">últimos registros</span></div>
+    <div class="card recent-card reveal" style="animation-delay:.24s"><div id="recentList"></div></div>
+
+    <div class="card reveal" style="animation-delay:.28s">
+      <div class="eyebrow">Plataformas</div>
+      <div id="platBox"></div>
+    </div>
+
+    <div class="card reveal" style="animation-delay:.32s">
+      <div class="eyebrow">Eficiência <span class="tag" id="effTag"></span></div>
+      <div class="eff-row"><span class="l">Lucro por km</span><b class="number-value" id="eKm">—</b></div>
+      <div class="eff-row"><span class="l">Lucro por hora</span><b class="number-value" id="eHr">—</b></div>
+      <div class="eff-row"><span class="l">Ganho por corrida</span><b class="number-value" id="eRide">—</b></div>
+      <div class="eff-row"><span class="l">Consumo médio</span><b class="number-value" id="eCons">—</b></div>
+      <div class="eff-row"><span class="l">Custo de combustível por km</span><b class="number-value" id="eCusto">—</b></div>
+      <div class="eff-row"><span class="l">Dias rodados</span><b class="number-value" id="eDias">—</b></div>
+      <div class="eff-row"><span class="l">Despesas extras</span><b class="number-value" id="eExp">—</b></div>
+    </div>
+  </section>
+
+  <!-- ===================== DIA ===================== -->
+  <section id="view-dia" class="view">
+    <div class="card">
+      <div class="eyebrow" id="diaTitle">Nova corrida</div>
+      <div class="field"><label>Data</label><input type="date" id="d_data"></div>
+      <label>Aplicativo</label>
+      <div class="seg" id="appSeg">
+        <button data-app="99"><span class="sw"></span>99</button>
+        <button data-app="uber"><span class="sw"></span>Uber</button>
+        <button data-app="indrive"><span class="sw"></span>inDrive</button>
+      </div>
+      <div class="row">
+        <div class="field"><label id="lblGanho">Ganho na 99</label><div class="prefix"><span>R$</span><input class="money" type="text" inputmode="decimal" id="d_ganho" placeholder="0" step="0.01"></div></div>
+        <div class="field"><label id="lblCorr">Corridas na 99</label><input class="count" type="number" inputmode="numeric" id="d_corridas" placeholder="0" step="1"></div>
+      </div>
+      <div class="row">
+        <div class="field"><label>Km rodados</label><input class="money" type="text" inputmode="decimal" id="d_km" placeholder="0" step="0.1"></div>
+        <div class="field"><label>Horas</label><input class="money" type="text" inputmode="decimal" id="d_horas" placeholder="0" step="0.1"></div>
+      </div>
+      <div class="field"><label>Observação</label><input type="text" id="d_obs" placeholder="Ex: chuva, feriado, evento..."></div>
+      <button class="btn" onclick="saveDia()">Salvar</button>
+      <div style="height:8px"></div>
+      <button class="btn ghost" id="diaCancel" style="display:none" onclick="resetDia()">cancelar edição</button>
+    </div>
+    <div class="section-label">Corridas registradas</div>
+    <div id="diaList"></div>
+  </section>
+
+  <!-- ===================== COMBUSTÍVEL ===================== -->
+  <section id="view-fuel" class="view">
+    <div class="card">
+      <div class="eyebrow" id="fuelTitle">Abastecer</div>
+      <div class="field"><label>Data</label><input type="date" id="f_data"></div>
+      <div class="row">
+        <div class="field"><label>Valor pago</label><div class="prefix"><span>R$</span><input class="money" type="text" inputmode="decimal" id="f_valor" placeholder="0" step="0.01" oninput="calcLitros()"></div></div>
+        <div class="field"><label>Preço por litro</label><div class="prefix"><span>R$</span><input class="money" type="text" inputmode="decimal" id="f_preco" placeholder="0" step="0.001" oninput="calcLitros()"></div></div>
+      </div>
+      <div class="field"><label>Litros (calcula sozinho)</label><input class="money" type="text" inputmode="decimal" id="f_litros" placeholder="0" step="0.01"></div>
+      <button class="btn" onclick="saveFuel()">Salvar</button>
+      <div class="sub-actions"><button class="btn sec" onclick="showView('exp')">Nova despesa</button><button class="btn sec" onclick="showView('resumo')">Ver saldo</button></div>
+      <div style="height:8px"></div>
+      <button class="btn ghost" id="fuelCancel" style="display:none" onclick="resetFuel()">cancelar edição</button>
+    </div>
+    <div class="section-label">Abastecimentos registrados</div>
+    <div id="fuelList"></div>
+  </section>
+
+  <!-- ===================== GASTOS ===================== -->
+  <section id="view-exp" class="view">
+    <div class="card">
+      <div class="eyebrow" id="expTitle">Nova despesa</div>
+      <div class="field"><label>Data</label><input type="date" id="e_data"></div>
+      <div class="field">
+        <label id="e_cat_rotulo">Categoria</label>
+        <button type="button" class="picker" id="e_cat" onclick="abrirCategorias()"
+                aria-haspopup="dialog" aria-labelledby="e_cat_rotulo e_cat_nome">
+          <span class="picker-ic" id="e_cat_ic" aria-hidden="true"></span>
+          <span class="picker-nome" id="e_cat_nome">Manutenção</span>
+          <svg class="ic picker-seta" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+      </div>
+      <div class="field"><label>Valor</label><div class="prefix"><span>R$</span><input class="money" type="text" inputmode="decimal" id="e_valor" placeholder="0" step="0.01"></div></div>
+      <div class="field"><label>Descrição</label><input type="text" id="e_desc" placeholder="Ex: troca de óleo, pastilha de freio..."></div>
+      <button class="btn" onclick="saveExp()">Salvar</button>
+      <div class="sub-actions"><button class="btn sec" onclick="showView('fuel')">Abastecer</button><button class="btn sec" onclick="showView('resumo')">Ver saldo</button></div>
+      <div style="height:8px"></div>
+      <button class="btn ghost" id="expCancel" style="display:none" onclick="resetExp()">cancelar edição</button>
+    </div>
+    <div class="section-label">Despesas registradas</div>
+    <div id="expList"></div>
+  </section>
+
+  <!-- ===================== RELATÓRIOS ===================== -->
+  <section id="view-relatorios" class="view">
+    <div class="card">
+      <div class="eyebrow">Relatórios</div>
+      <p class="report-intro">Uma leitura rápida do que entrou, saiu e sobrou no período selecionado.</p>
+      <div class="period report-period">
+        <button data-p="dia" class="active" onclick="setPeriod('dia')">Hoje</button>
+        <button data-p="semana" onclick="setPeriod('semana')">Semana</button>
+        <button data-p="mes" onclick="setPeriod('mes')">Mês</button>
+        <button data-p="tudo" onclick="setPeriod('tudo')">Tudo</button>
+      </div>
+    </div>
+    <div class="report-grid">
+      <div class="report-stat report-stat--wide"><div class="k">Saldo final</div><div class="v accent fig number-value" id="rNet">R$ 0</div></div>
+      <div class="report-stat"><div class="k">Entrou</div><div class="v accent fig number-value" id="rGross">R$ 0</div></div>
+      <div class="report-stat"><div class="k">Saiu</div><div class="v rose fig number-value" id="rCosts">R$ 0</div></div>
+      <div class="report-stat"><div class="k">Km rodados</div><div class="v fig number-value" id="rKm">0 km</div></div>
+      <div class="report-stat"><div class="k">Horas trabalhadas</div><div class="v fig number-value" id="rHours">0 h</div></div>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Por aplicativo</div>
+      <div id="reportBreakdown"></div>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Indicadores do período</div>
+      <div id="reportInsights"></div>
+    </div>
+  </section>
+</main>
+
+<nav class="dock">
+  <button data-v="resumo" class="active" onclick="showView('resumo')"><svg class="ic" viewBox="0 0 24 24"><path d="M4 18V9M10 18V5M16 18v-7M22 18H2"/></svg>Início</button>
+  <button data-v="dia" onclick="showView('dia')"><svg class="ic" viewBox="0 0 24 24"><path d="M4 5.5h16v14H4zM8 3.5v4M16 3.5v4M4 9.5h16"/><path d="M8 13h3M8 16h5"/></svg>Corridas</button>
+  <button data-v="exp" onclick="showView('exp')"><svg class="ic" viewBox="0 0 24 24"><path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9.5 8.5h5M9.5 12h5"/></svg>Gastos</button>
+  <button data-v="relatorios" onclick="showView('relatorios')"><svg class="ic" viewBox="0 0 24 24"><path d="M4 19V5M4 19h17"/><path d="m7 15 3-4 3 2 5-6"/></svg>Relatórios</button>
+</nav>
+
+<div class="modal-bg" id="backupModal" onclick="if(event.target===this)closeBackup()">
+  <div class="modal">
+    <h3>Backup dos dados</h3>
+    <p class="mini">Use o backup para guardar uma cópia ou transferir seus registros manualmente. Com uma conta, seus dados também podem ser sincronizados entre dispositivos.</p>
+    <button class="btn" onclick="exportData()">Baixar backup</button>
+    <div style="height:10px"></div>
+    <button class="btn sec" onclick="document.getElementById('importFile').click()">Restaurar backup</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+    <div style="height:10px"></div>
+    <button class="btn danger" onclick="wipeData()">Apagar tudo</button>
+    <div style="height:8px"></div>
+    <button class="btn ghost" onclick="closeBackup()">fechar</button>
+    <a class="btn ghost" href="./assets/model-credits.html" target="_blank" rel="noopener">Créditos do modelo 3D</a>
+  </div>
+</div>
+
+<div class="modal-bg" id="catModal" onclick="if(event.target===this)fecharCategorias()">
+  <div class="modal cat-sheet" role="dialog" aria-modal="true" aria-labelledby="catTitulo">
+    <div class="cat-head">
+      <h3 id="catTitulo">Escolha a categoria</h3>
+      <button type="button" class="cat-x" onclick="fecharCategorias()" aria-label="Fechar a lista">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="cat-lista" id="catLista"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="metaModal" onclick="if(event.target===this)closeMeta()">
+  <div class="modal">
+    <h3>Metas de lucro</h3>
+    <p class="mini">Quanto você quer que sobre no bolso, já descontando combustível e despesas. Cada período tem a sua meta, independente das outras — deixe em branco a que você não quiser usar.</p>
+    <div class="field"><label>Meta por dia</label><div class="prefix"><span>R$</span><input class="money" type="text" inputmode="decimal" id="metaInput" placeholder="Ex: 200"></div></div>
+    <div class="field"><label>Meta por semana</label><div class="prefix"><span>R$</span><input class="money" type="text" inputmode="decimal" id="metaSemanaInput" placeholder="Ex: 1200"></div></div>
+    <div class="field"><label>Meta por mês</label><div class="prefix"><span>R$</span><input class="money" type="text" inputmode="decimal" id="metaMesInput" placeholder="Ex: 5000"></div></div>
+    <button class="btn" onclick="saveMeta()">Salvar meta</button>
+    <div style="height:8px"></div>
+    <button class="btn ghost" onclick="closeMeta()">fechar</button>
+  </div>
+</div>
+
+<div class="modal-bg" id="authModal" onclick="if(event.target===this)closeAuth()">
+  <div class="modal">
+    <h3 id="authTitle">Entrar no Saldo Final</h3>
+    <div class="auth-status" data-backend-status data-state="local">Somente neste aparelho</div>
+    <p class="mini">Crie uma conta para manter suas corridas, gastos e metas sincronizados entre seus dispositivos. O app continua funcionando offline.</p>
+    <div id="authFormView">
+      <form id="authForm" class="auth-form">
+        <div class="field" id="authNameWrap" hidden><label for="authName">Nome</label><input id="authName" type="text" autocomplete="name" placeholder="Seu nome"></div>
+        <div class="field"><label for="authEmail">E-mail</label><input id="authEmail" type="email" autocomplete="email" required placeholder="voce@email.com"></div>
+        <div class="field"><label for="authPassword">Senha</label><input id="authPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="Mínimo de 6 caracteres"></div>
+        <button class="btn" id="authSubmit" type="submit">Entrar</button>
+      </form>
+      <div class="auth-divider">ou</div>
+      <button class="btn sec" id="authGoogle" type="button">Continuar com Google</button>
+      <button class="btn ghost" id="authForgot" type="button">Esqueci minha senha</button>
+      <button class="btn ghost" id="authModeToggle" type="button">Ainda não tenho conta</button>
+    </div>
+    <div id="authAccountView" class="auth-account" hidden>
+      <strong>Conta conectada</strong>
+      <span id="authAccountEmail"></span>
+      <div style="height:12px"></div>
+      <button class="btn danger" id="authLogout" type="button">Sair da conta</button>
+    </div>
+    <div class="auth-settings">
+      <span class="auth-settings-label">Configurações da conta</span>
+      <button class="btn sec" data-open-backup type="button">Backup dos dados</button>
+    </div>
+    <div class="auth-feedback" id="authFeedback" role="status" aria-live="polite"></div>
+    <p class="app-versao" id="appVersao">versão local</p>
+    <button class="btn ghost" data-close-auth type="button">fechar</button>
+  </div>
+</div>
+
+<button class="assistant-fab" type="button" data-open-assistant aria-label="Abrir o assistente">
+  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M20.5 11.3a8.4 8.4 0 0 1-9 8.4 8.9 8.9 0 0 1-3-.6L4 20.5l1.5-4.2a8.2 8.2 0 0 1-1-4 8.4 8.4 0 0 1 8.5-8.3 8.4 8.4 0 0 1 7.5 7.3z"/>
+    <path d="M9 11.5h6M9 14.5h3.5"/>
+  </svg>
+</button>
+
+<div class="modal-bg chat-bg" id="assistantModal" onclick="if(event.target===this)window.SaldoFinalAssistantUi?.close()">
+  <div class="chat" role="dialog" aria-modal="true" aria-labelledby="assistantTitle">
+
+    <div class="chat-head">
+      <span class="chat-avatar" aria-hidden="true">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M12 3.5v3M12 17.5v3M4.7 6.7l2.1 2.1M17.2 17.2l2.1 2.1M3.5 12h3M17.5 12h3M4.7 17.3l2.1-2.1M17.2 6.8l2.1-2.1"/><path d="M9 12a3 3 0 1 1 6 0c0 2-1.5 2.7-1.5 4h-3C10.5 14.7 9 14 9 12z"/></svg>
+      </span>
+      <span class="chat-who">
+        <b id="assistantTitle">Assistente</b>
+        <small>nada é salvo sem você confirmar</small>
+      </span>
+      <button class="chat-x" type="button" data-assistant-close aria-label="Fechar o assistente">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+    <div class="chat-body" id="assistantBody" role="log" aria-live="polite"></div>
+
+    <form class="chat-bar" id="assistantForm">
+      <label class="sr-only" for="assistantText">O que você quer registrar</label>
+      <input id="assistantText" type="text" autocomplete="off" placeholder="Escreva aqui…">
+      <button class="chat-icon" id="assistantPrint" type="button" aria-label="Mandar um print da tela de ganhos">
+        <svg class="ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/><circle cx="8.5" cy="9.5" r="1.5"/></svg>
+      </button>
+      <button class="chat-icon" id="assistantMic" type="button" aria-pressed="false" aria-label="Gravar por voz">
+        <svg class="ic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3"/></svg>
+      </button>
+      <button class="chat-icon chat-send" id="assistantSend" type="submit" aria-label="Enviar">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+      </button>
+    </form>
+
+    <input type="file" id="assistantPrintFile" accept="image/*" hidden>
+
+    <div class="chat-rec" id="assistantRec" hidden>
+      <button class="chat-icon chat-drop" type="button" id="assistantDiscard" aria-label="Descartar a gravação">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M5 7h14M9 7V5h6v2M8 7l.7 12h6.6L16 7"/></svg>
+      </button>
+      <span class="chat-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      <span class="chat-time fig" id="assistantTimer">0:00</span>
+      <button class="chat-icon chat-send" type="button" id="assistantStop" aria-label="Parar e enviar a gravação">
+        <svg class="ic" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" stroke="none"/></svg>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+const APPS={
+  '99':{nome:'99', color:'#FFDD00', abbr:'99'},
+  'uber':{nome:'Uber', color:'#F1F3F8', abbr:'UBER'},
+  'indrive':{nome:'inDrive', color:'#B4ED00', abbr:'IND'},
+};
+
+const DB={
+  days:loadArr('rc_days'), fuel:loadArr('rc_fuel'), exp:loadArr('rc_exp'),
+  settings:loadObj('rc_settings',{metaDiaria:0,metaSemanal:0,metaMensal:0}),
+};
+function loadArr(k){ try{return JSON.parse(localStorage.getItem(k))||[]}catch(e){return[]} }
+function loadObj(k,def){ try{return Object.assign({},def,JSON.parse(localStorage.getItem(k))||{})}catch(e){return def} }
+function save(k,v){ localStorage.setItem(k,JSON.stringify(v)); window.SaldoFinalBackend?.onLegacyStateChanged?.(k,v) }
+function saveAll(){ save('rc_days',DB.days);save('rc_fuel',DB.fuel);save('rc_exp',DB.exp);save('rc_settings',DB.settings) }
+function uid(){ return window.crypto?.randomUUID?.()||Date.now().toString(36)+Math.random().toString(36).slice(2,6) }
+
+/* migra registros antigos (g99/gin) para o formato por-app */
+function migrateDays(){
+  let changed=false; const out=[];
+  DB.days.forEach(r=>{
+    if(r.app){ out.push(r); return; }
+    // Nao ter plataforma NAO quer dizer formato antigo: uma corrida pode voltar do
+    // servidor com a plataforma vazia. Recriar essa corrida com id novo, ganho 0 e
+    // corridas 0 deixava uma linha fantasma so com km na conta do motorista — e o
+    // original voltava na sincronizacao seguinte, sobrando as duas.
+    const formatoAntigo = r.g99!==undefined || r.gin!==undefined;
+    if(!formatoAntigo){ changed=true; out.push({...r, app:'99'}); return; }
+    changed=true; let placed=false;
+    // A primeira linha herda o id, as corridas, o km e as horas do registro antigo;
+    // a segunda so o ganho da outra plataforma. Antes corridas era zerado sempre.
+    const mk=(app,ganho)=>{ const rec={id:placed?uid():(r.id||uid()),data:r.data,app,ganho:ganho||0,corridas:0,km:0,horas:0,obs:r.obs||''}; if(!placed){rec.corridas=Math.max(0,Math.round(r.corridas||0));rec.km=r.km||0;rec.horas=r.horas||0;placed=true;} return rec; };
+    if(r.g99>0) out.push(mk('99',r.g99));
+    if(r.gin>0) out.push(mk('indrive',r.gin));
+    if(!(r.g99>0)&&!(r.gin>0)) out.push(mk('99',0));
+  });
+  if(changed){ DB.days=out; save('rc_days',DB.days); }
+}
+
+const BRL=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
+const BRL0=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0});
+function money(n){ return BRL.format(n||0) }
+// money0 arredondava para real inteiro; o motorista quer ver os centavos que
+// digitou, entao ele agora e o mesmo que money(). Mantido como nome para nao
+// espalhar a mudanca por dezenas de pontos de chamada.
+function money0(n){ return BRL.format(n||0) }
+// Mesmo recuo do "R$" dos numeros animados, para a lista nao destoar.
+// pt-BR escreve 2,5 h — nao 2.5 h. Numero solto ia cru para a tela.
+function numBR(n){ return Number(n||0).toLocaleString('pt-BR',{maximumFractionDigits:1}) }
+function moneyHTML(n){ return money0(n).replace(/^(R\$)(\s)/,'<i class="cur">$1</i>$2') }
+function polarPoint(cx,cy,radius,degrees){
+  const radians=degrees*Math.PI/180;
+  return {x:cx+Math.cos(radians)*radius,y:cy+Math.sin(radians)*radius};
+}
+function segmentPath(angle,kind){
+  const cx=160,cy=156,outer=130;
+  const config={major:{inner:111,half:2.25},half:{inner:116,half:1.75},minor:{inner:120,half:1.35}}[kind];
+  const outerStart=polarPoint(cx,cy,outer,angle-config.half);
+  const outerEnd=polarPoint(cx,cy,outer,angle+config.half);
+  const innerEnd=polarPoint(cx,cy,config.inner,angle+config.half*.72);
+  const innerStart=polarPoint(cx,cy,config.inner,angle-config.half*.72);
+  return `M ${outerStart.x.toFixed(2)} ${outerStart.y.toFixed(2)} L ${outerEnd.x.toFixed(2)} ${outerEnd.y.toFixed(2)} L ${innerEnd.x.toFixed(2)} ${innerEnd.y.toFixed(2)} L ${innerStart.x.toFixed(2)} ${innerStart.y.toFixed(2)} Z`;
+}
+function buildGaugeScale(){
+  const segments=document.querySelector('[data-gauge-segments]');
+  const labels=document.querySelector('[data-gauge-labels]');
+  if(!segments||!labels||segments.childElementCount)return;
+  const ns='http://www.w3.org/2000/svg';
+  const startDeg=155,sweepDeg=230;
+  for(let i=0;i<=32;i++){
+    const value=i/4;
+    const angle=startDeg+sweepDeg*(value/8);
+    const kind=i%4===0?'major':(i%2===0?'half':'minor');
+    // Chegar perto da meta e o que o motorista quer: o trecho final e verde.
+    // Vermelho agora quer dizer uma coisa so, o dia fechado no negativo.
+    const zone=value>=6.25?'goal':'cyan';
+    const segment=document.createElementNS(ns,'path');
+    segment.setAttribute('d',segmentPath(angle,kind));
+    segment.setAttribute('class',`scale-segment ${kind} zone-${zone}`);
+    segments.appendChild(segment);
+    if(kind==='major'&&value%2===0){
+      const point=polarPoint(160,156,93,angle); // dentro da ponta do ponteiro
+      const label=document.createElementNS(ns,'text');
+      label.dataset.gaugeLabel=String(value);
+      label.textContent=String(value*12.5); // a escala fala em % da meta
+      label.setAttribute('x',point.x.toFixed(2));
+      label.setAttribute('y',point.y.toFixed(2));
+      label.setAttribute('class',`scale-label zone-${zone}`);
+      label.setAttribute('text-anchor','middle');
+      label.setAttribute('dominant-baseline','middle');
+      labels.appendChild(label);
+    }
+  }
+}
+// O ponteiro tem 104px do eixo e os numeros estao a 93px, entao ele passa por
+// cima deles — como em qualquer painel de verdade. O problema era so no zero:
+// ali ele nao passava, ficava PARADO em cima do "0", escondendo o numero no
+// estado que todo mundo ve primeiro. Velocimetro de verdade resolve isso ha
+// decadas: em repouso a agulha encosta num pino um pouco abaixo do zero.
+const GAUGE_ANGULO_ZERO=245;
+const GAUGE_ANGULO_REPOUSO=GAUGE_ANGULO_ZERO-6;
+function setGaugeNeedle(percent){
+  const normalized=Math.max(0,Math.min(100,percent||0));
+  const angle=normalized===0?GAUGE_ANGULO_REPOUSO:GAUGE_ANGULO_ZERO+normalized*2.3;
+  document.getElementById('needleGroup').setAttribute('transform',`rotate(${angle} 160 156)`);
+}
+function num(id){ const v=parseFloat((document.getElementById(id).value||'').replace(',','.')); return isNaN(v)?0:v }
+function val(id){ return document.getElementById(id).value }
+function setVal(id,v){ document.getElementById(id).value=v }
+// Preenche campo decimal do jeito que o motorista escreve: com virgula.
+// Numero em JS vira texto com ponto (156.89), e o campo agora e de texto.
+function setNum(id,v){ setVal(id, (v===''||v===null||v===undefined||!isFinite(v)||v===0) ? '' : String(v).replace('.',',')) }
+function txt(id,v){ document.getElementById(id).textContent=v }
+function motionReduced(){ return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true }
+function motionFormatter(kind){
+  if(typeof kind==='function')return kind;
+  if(kind==='currency')return value=>money(value);
+  if(kind==='currency0')return value=>money0(value); // tambem com centavos agora
+  if(kind==='percent')return value=>`${Math.round(value)}%`;
+  if(kind==='distance')return value=>`${value.toLocaleString('pt-BR',{maximumFractionDigits:1})} km`;
+  if(kind==='hours')return value=>`${value.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})} h`;
+  if(kind==='decimal1')return value=>value.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1});
+  return value=>Math.round(value).toLocaleString('pt-BR');
+}
+function animateNumber(element,target,formatter,options={}){
+  if(!element)return;
+  const numeric=typeof target==='number'?target:(typeof target==='string'&&target.trim()!==''?Number(target):NaN);
+  if(!Number.isFinite(numeric)){
+    if(element._motionFrame)cancelAnimationFrame(element._motionFrame);
+    element._motionFrame=null; element._motionCurrent=null;
+    element.classList.remove('is-counting');
+    delete element.dataset.motionTarget; delete element.dataset.motionText;
+    element.textContent=options.fallback??'—';
+    return;
+  }
+  const format=motionFormatter(formatter);
+  const finalText=format(numeric);
+  const previousTarget=Number(element.dataset.motionTarget);
+  if(Number.isFinite(previousTarget)&&previousTarget===numeric&&element.dataset.motionText===finalText)return;
+  if(element._motionFrame)cancelAnimationFrame(element._motionFrame);
+  const previous=Number.isFinite(element._motionCurrent)?element._motionCurrent:(Number.isFinite(previousTarget)?previousTarget:Number(options.from??0));
+  element.dataset.motionTarget=String(numeric); element.dataset.motionText=finalText;
+  // O "R$" recua para os digitos mandarem. O espaco fica fora da tag,
+  // entao o texto lido da tela continua exatamente "R$ 109,30".
+  const apply=value=>{ element._motionCurrent=value; element.innerHTML=format(value).replace(/^(R\$)(\s)/,'<i class="cur">$1</i>$2'); if(value===numeric)element.classList.remove('is-counting'); };
+  element.classList.add('is-counting');
+  if(motionReduced()||previous===numeric){ apply(numeric); return; }
+  const duration=Math.min(650,Math.max(450,Number(options.duration)||560));
+  const started=performance.now();
+  const step=now=>{
+    const progress=Math.min(1,(now-started)/duration);
+    const eased=1-Math.pow(1-progress,4);
+    apply(previous+(numeric-previous)*eased);
+    if(progress<1) element._motionFrame=requestAnimationFrame(step);
+    else{ element._motionFrame=null; apply(numeric); }
+  };
+  element._motionFrame=requestAnimationFrame(step);
+}
+function setMetric(id,value,formatter='integer',options={}){
+  const element=document.getElementById(id); if(!element)return;
+  element.classList.add('number-value');
+  animateNumber(element,value,formatter,options);
+}
+function animateMarkedNumbers(root=document){
+  root.querySelectorAll?.('[data-motion-number]').forEach(element=>{
+    animateNumber(element,element.dataset.motionTargetValue,element.dataset.motionKind||'integer',{from:0});
+  });
+}
+function today(){ const d=new Date(),p=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}` }
+function fmtShort(iso){ const dt=new Date(iso+'T12:00'); const d=['dom','seg','ter','qua','qui','sex','sáb']; const[y,m,dd]=iso.split('-'); return `${dd}/${m} · ${d[dt.getDay()]}` }
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),1900) }
+
+    function showView(v){
+      const next=document.getElementById('view-'+v);
+      const current=document.querySelector('.view.active');
+      if(!next)return;
+      if(current&&current!==next){
+        current.classList.remove('active','view-enter');
+        current.setAttribute('aria-hidden','true');
+      }
+      next.classList.add('active','view-enter');
+      next.setAttribute('aria-hidden','false');
+      document.querySelectorAll('.dock button').forEach(b=>b.classList.toggle('active',b.dataset.v===v));
+      window.scrollTo(0,0);
+      requestAnimationFrame(()=>next.classList.remove('view-enter'));
+      if(v==='resumo')renderResumo();
+      if(v==='relatorios')renderRelatorios();
+    }
+
+let period='dia';
+const pLabel={dia:'hoje',semana:'na semana',mes:'no mês',tudo:'total'};
+function setPeriod(p){
+  period=p;
+  document.querySelectorAll('.period button').forEach(b=>b.classList.toggle('active',b.dataset.p===p));
+  renderResumo();
+  if(document.getElementById('view-relatorios').classList.contains('active')) renderRelatorios();
+}
+function matchesPeriod(iso,p){
+  if(p==='tudo')return true;
+  iso=String(iso||'').slice(0,10); // o servidor pode mandar a data com hora junto; so a parte da data importa
+  const d=new Date(iso+'T12:00'), now=new Date();
+  if(p==='dia')return iso===today();
+  if(p==='semana'){ const day=(now.getDay()+6)%7; const s=new Date(now); s.setDate(now.getDate()-day); s.setHours(0,0,0,0); return d>=s; }
+  if(p==='mes')return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();
+  return true;
+}
+function inPeriod(iso){ return matchesPeriod(iso,period); }
+// Cada periodo tem a sua propria meta. Antes a semanal era a diaria x6 e a
+// mensal x26, entao definir a meta do dia mexia nas outras duas sozinho.
+function metaForPeriod(){ const s=DB.settings||{}; if(period==='dia')return s.metaDiaria||0; if(period==='semana')return s.metaSemanal||0; if(period==='mes')return s.metaMensal||0; return 0; }
+
+/* ---------- RESUMO ---------- */
+function renderResumo(){
+  const days=DB.days.filter(x=>inPeriod(x.data));
+  const fuel=DB.fuel.filter(x=>inPeriod(x.data));
+  const exp=DB.exp.filter(x=>inPeriod(x.data));
+  const ganhos=sum(days,'ganho'), corridas=sum(days,'corridas');
+  const km=sum(days,'km'), horas=sum(days,'horas');
+  const fuelT=sum(fuel,'valor'), litros=sum(fuel,'litros'), expT=sum(exp,'valor');
+  const gastos=fuelT+expT, lucro=ganhos-gastos;
+
+  txt('heroPeriod',pLabel[period]); txt('gLead',pLabel[period]);
+  setMetric('gVal',lucro,'currency0'); setMetric('fIn',ganhos,'currency0'); setMetric('fOut',gastos,'currency0');
+  setMetric('distanceValue',km,'distance');
+
+  const meta=metaForPeriod();
+  const fill=meta>0?Math.max(0,Math.min(100,lucro/meta*100)):0;
+  const pct=meta>0?Math.round(lucro/meta*100):null;
+  setMetric('goalProgress',pct,'percent',{fallback:'—'});
+  const gauge=document.querySelector('[data-financial-gauge]');
+  setMetric('gaugeDigitalValue',lucro,'currency0');
+  gauge.dataset.gaugeState=lucro<0?'alert':(meta>0&&lucro>=meta?'success':(meta>0?'progress':'empty'));
+  setGaugeNeedle(fill);
+  // Quatro situacoes ja eram calculadas acima e nenhuma chegava na tela.
+  const chip=document.getElementById('goalState');
+  const nomeDoEstado={progress:'a caminho',success:'bateu a meta',alert:'prejuízo'}[gauge.dataset.gaugeState];
+  chip.textContent=nomeDoEstado||''; chip.hidden=!nomeDoEstado;
+  const gm=document.getElementById('gMeta');
+  // O "44%" aparecia aqui pela terceira vez — ja esta grande logo acima e
+  // desenhado no ponteiro. No lugar dele entra a conta que o motorista faz
+  // de cabeca toda vez que olha: quanto ainda falta.
+  if(meta>0){ const falta=meta-lucro;
+    const resto=falta>0?`faltam <b>${money0(falta)}</b>`:`<b>${money0(-falta)}</b> acima`;
+    gm.innerHTML=`de <b>${money0(meta)}</b> · ${resto} <button onclick="openMeta()" aria-label="editar meta">⋯</button>`; }
+  // Em "Tudo" nao existe meta (e o historico inteiro, nao um periodo), entao nao
+  // faz sentido oferecer definir uma ali.
+  else if(period==='tudo'){ gm.innerHTML=''; }
+  else{ gm.innerHTML=`<button class="setmeta" onclick="openMeta()">Definir meta</button>`; }
+
+  setMetric('sKm',km>0?ganhos/km:null,'currency',{fallback:'—'}); txt('sKmF',km>0?km.toFixed(0)+' km':'informe os km');
+  setMetric('sHr',horas>0?ganhos/horas:null,'currency',{fallback:'—'}); txt('sHrF',horas>0?numBR(horas)+' h':'informe as horas');
+  setMetric('sFuel',fuelT,'currency0'); txt('sFuelF',fuel.length?`${fuel.length}× · ${litros.toFixed(0)} L`:'sem registro');
+  setMetric('sRides',corridas,'integer'); txt('sRidesF',corridas>0?money(ganhos/corridas)+'/corrida':'sem corridas');
+
+  const pb=document.getElementById('platBox');
+  if(ganhos<=0){ pb.innerHTML=`<div class="empty" style="padding:14px 0"><div class="s">Sem ganhos registrados ${pLabel[period]}.</div></div>`; }
+  else{
+    const byApp={}; Object.keys(APPS).forEach(a=>byApp[a]=0);
+    days.forEach(d=>{ if(byApp[d.app]===undefined)byApp[d.app]=0; byApp[d.app]+=d.ganho||0; });
+    const mx=Math.max(...Object.values(byApp),1);
+    pb.innerHTML=Object.keys(APPS).filter(a=>byApp[a]>0).map(a=>plat(APPS[a].nome,APPS[a].color,byApp[a],ganhos,mx)).join(''); animateMarkedNumbers(pb);
+  }
+
+  txt('effTag',pLabel[period]);
+  setMetric('eKm',km>0?lucro/km:null,'currency',{fallback:'—'});
+  setMetric('eHr',horas>0?lucro/horas:null,'currency',{fallback:'—'});
+  setMetric('eRide',corridas>0?lucro/corridas:null,'currency',{fallback:'—'});
+  if(litros>0&&km>0) setMetric('eCons',km/litros,value=>`${value.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})} km/L`); else setMetric('eCons',null,'decimal1',{fallback:'—'});
+  setMetric('eCusto',km>0?fuelT/km:null,'currency',{fallback:'—'});
+  setMetric('eDias',new Set(days.map(d=>d.data)).size,'integer');
+  setMetric('eExp',expT,'currency0');
+
+  txt('tagline','Controle e saldo do motorista');
+  renderRecentList();
+}
+function sum(a,k){ return a.reduce((s,x)=>s+(x[k]||0),0) }
+function plat(name,color,v,total,mx){
+  const pct=total>0?Math.round(v/total*100):0, w=Math.round(v/mx*100);
+  return `<div class="plat"><div class="head"><span class="name"><span class="swatch" style="background:${color}"></span>${name}</span><span><span class="amt fig number-value" data-motion-number data-motion-target-value="${v}" data-motion-kind="currency">${money(v)}</span><span class="pct">${pct}%</span></span></div><div class="track"><div class="fill" style="width:${w}%;background:${color}"></div></div></div>`;
+}
+
+function esc(value){ return String(value??'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function renderRecentList(){
+  const el=document.getElementById('recentList'); if(!el)return;
+  const entries=[];
+  DB.days.forEach(r=>{ const app=APPS[r.app]||APPS['99']; entries.push({data:r.data,view:'dia',title:app.nome+' · '+fmtShort(r.data),detail:(r.corridas||0)+' corridas'+(r.km?' · '+r.km+' km':''),amount:r.ganho||0,direction:'in',badge:app.abbr,color:app.color}); });
+  DB.fuel.forEach(r=>entries.push({data:r.data,view:'fuel',title:'Abastecimento · '+fmtShort(r.data),detail:r.litros?(r.litros.toFixed(1)+' litros'):'Combustível',amount:-(r.valor||0),direction:'out',badge:'L',color:'var(--rose)'}));
+  DB.exp.forEach(r=>entries.push({data:r.data,view:'exp',title:esc(r.cat||'Despesa')+' · '+fmtShort(r.data),detail:esc(r.desc||'Custo registrado'),amount:-(r.valor||0),direction:'out',badge:'R$',color:'var(--rose)'}));
+  entries.sort((a,b)=>b.data.localeCompare(a.data));
+  if(!entries.length){ el.innerHTML=empty(iconCar(),'Sem lançamentos ainda','Toque em Nova corrida para começar'); return; }
+  el.innerHTML=entries.slice(0,5).map(r=>`<div class="item" role="button" tabindex="0" onclick="showView('${r.view}')" onkeydown="if(event.key==='Enter'||event.key===' ')showView('${r.view}')"><div class="badge" style="border-color:${r.color}66"><span class="n" style="color:${r.color}">${r.badge}</span><span class="u">${r.direction==='in'?'entrada':'saída'}</span></div><div class="info"><div class="t">${r.title}</div><div class="d">${r.detail}</div></div><div class="right"><div class="a ${r.direction} fig number-value" data-motion-number data-motion-target-value="${Math.abs(r.amount)}" data-motion-kind="currency0">${money0(Math.abs(r.amount))}</div></div></div>`).join('');
+  animateMarkedNumbers(el);
+}
+
+function renderRelatorios(){
+  const days=DB.days.filter(x=>inPeriod(x.data));
+  const fuel=DB.fuel.filter(x=>inPeriod(x.data));
+  const exp=DB.exp.filter(x=>inPeriod(x.data));
+  const ganhos=sum(days,'ganho'), corridas=sum(days,'corridas'), km=sum(days,'km'), horas=sum(days,'horas');
+  const fuelT=sum(fuel,'valor'), expT=sum(exp,'valor'), gastos=fuelT+expT, lucro=ganhos-gastos;
+  setMetric('rNet',lucro,'currency0'); setMetric('rGross',ganhos,'currency0'); setMetric('rCosts',gastos,'currency0');
+  setMetric('rKm',km,'distance'); setMetric('rHours',horas,'hours');
+
+  const byApp={}; Object.keys(APPS).forEach(a=>byApp[a]=0);
+  days.forEach(d=>{ if(byApp[d.app]===undefined)byApp[d.app]=0; byApp[d.app]+=d.ganho||0; });
+  const breakdown=document.getElementById('reportBreakdown');
+  if(!ganhos){ breakdown.innerHTML=empty(iconCar(),'Sem ganhos neste período','Altere o filtro ou registre um fechamento'); }
+  else{ const mx=Math.max(...Object.values(byApp),1); breakdown.innerHTML=Object.keys(APPS).filter(a=>byApp[a]>0).map(a=>plat(APPS[a].nome,APPS[a].color,byApp[a],ganhos,mx)).join(''); animateMarkedNumbers(breakdown); }
+
+  const notes=[
+    ['Média por corrida',corridas?lucro/corridas:null,'currency'],
+    ['Resultado por km',km?lucro/km:null,'currency'],
+    ['Resultado por hora',horas?lucro/horas:null,'currency'],
+    ['Dias com registro',new Set(days.map(d=>d.data)).size,'integer'],
+    ['Despesas extras',expT,'currency0']
+  ];
+  const insights=document.getElementById('reportInsights');
+  insights.innerHTML=notes.map(n=>`<div class="report-note"><span>${n[0]}</span><b class="number-value" data-motion-number data-motion-target-value="${n[1]??''}" data-motion-kind="${n[2]}">${n[1]===null?'—':motionFormatter(n[2])(n[1])}</b></div>`).join('');
+  animateMarkedNumbers(insights);
+}
+
+/* ---------- DIA ---------- */
+let editDia=null, dayApp='99';
+document.getElementById('appSeg').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b)return; setDayApp(b.dataset.app); });
+function setDayApp(app){
+  dayApp=app;
+  document.querySelectorAll('#appSeg button').forEach(b=>{ const on=b.dataset.app===app; b.classList.toggle('active',on); b.style.setProperty('--sel',APPS[b.dataset.app].color); });
+  txt('lblGanho','Ganho na '+APPS[app].nome);
+  txt('lblCorr','Corridas na '+APPS[app].nome);
+}
+function saveDia(){
+  const data=val('d_data')||today();
+  const r={id:editDia||uid(),data,app:dayApp,ganho:num('d_ganho'),corridas:Math.max(0,Math.round(num('d_corridas'))),km:num('d_km'),horas:num('d_horas'),obs:val('d_obs').trim()};
+  if(!r.ganho&&!r.corridas&&!r.km&&!r.horas){ toast('Preencha algum valor'); return; }
+  const idx=editDia?DB.days.findIndex(x=>x.id===editDia):-1;
+  if(idx>=0){ DB.days[idx]=r; } else DB.days.push(r);
+  save('rc_days',DB.days); resetDia(); renderDiaList(); renderResumo(); toast('Registro salvo');
+}
+function resetDia(){ editDia=null; setVal('d_data',today()); ['d_ganho','d_corridas','d_km','d_horas','d_obs'].forEach(i=>setVal(i,'')); setDayApp('99'); txt('diaTitle','Nova corrida'); document.getElementById('diaCancel').style.display='none'; }
+function loadDia(id){ const r=DB.days.find(x=>x.id===id); if(!r)return; editDia=id; setVal('d_data',r.data); setDayApp(r.app||'99'); setNum('d_ganho',r.ganho); setVal('d_corridas',r.corridas||''); setNum('d_km',r.km); setNum('d_horas',r.horas); setVal('d_obs',r.obs||''); txt('diaTitle','Editar registro'); document.getElementById('diaCancel').style.display='block'; window.scrollTo(0,0); }
+function renderDiaList(){
+  const el=document.getElementById('diaList');
+  const a=[...DB.days].sort((x,y)=>y.data.localeCompare(x.data)).slice(0,90);
+  if(!a.length){ el.innerHTML=empty(iconCar(),'Nenhuma corrida registrada','Toque em Nova corrida para começar'); return; }
+  el.innerHTML=a.map(r=>{ const ap=APPS[r.app]||APPS['99']; const ex=[]; if(r.km)ex.push(numBR(r.km)+' km'); if(r.horas)ex.push(numBR(r.horas)+' h'); if(r.obs)ex.push(r.obs);
+    return `<div class="item"><div class="badge" style="border-color:${ap.color}44"><span class="n" style="color:${ap.color}">${r.corridas||0}</span><span class="u">corr.</span></div><div class="info"><div class="t">${ap.nome} · ${fmtShort(r.data)}</div><div class="d">${ex.length?ex.join(' · '):'—'}</div></div><div class="right"><div class="a in fig">${moneyHTML(r.ganho)}</div><div class="actions"><button class="x" onclick="loadDia('${r.id}')">editar</button><button class="x" onclick="del('days','${r.id}')">excluir</button></div></div></div>`;
+  }).join('');
+}
+
+/* ---------- COMBUSTÍVEL ---------- */
+let editFuel=null;
+function calcLitros(){ const v=num('f_valor'),p=num('f_preco'); if(v>0&&p>0)setNum('f_litros',Number((v/p).toFixed(2))); }
+function saveFuel(){
+  const data=val('f_data')||today();
+  const r={id:editFuel||uid(),data,valor:num('f_valor'),preco:num('f_preco'),litros:num('f_litros')};
+  if(r.valor<=0){ toast('Informe o valor'); return; }
+  const idx=editFuel?DB.fuel.findIndex(x=>x.id===editFuel):-1;
+  if(idx>=0){ DB.fuel[idx]=r; } else DB.fuel.push(r);
+  save('rc_fuel',DB.fuel); resetFuel(); renderFuelList(); renderResumo(); toast('Abastecimento salvo');
+}
+function resetFuel(){ editFuel=null; setVal('f_data',today()); ['f_valor','f_preco','f_litros'].forEach(i=>setVal(i,'')); txt('fuelTitle','Abastecer'); document.getElementById('fuelCancel').style.display='none'; }
+function loadFuel(id){ const r=DB.fuel.find(x=>x.id===id); if(!r)return; editFuel=id; setVal('f_data',r.data); setNum('f_valor',r.valor); setNum('f_preco',r.preco); setNum('f_litros',r.litros); txt('fuelTitle','Editar abastecimento'); document.getElementById('fuelCancel').style.display='block'; window.scrollTo(0,0); }
+function renderFuelList(){
+  const el=document.getElementById('fuelList');
+  const a=[...DB.fuel].sort((x,y)=>y.data.localeCompare(x.data)).slice(0,90);
+  if(!a.length){ el.innerHTML=empty(iconFuel(),'Nenhum abastecimento','Registre o combustível para calcular seu custo real'); return; }
+  el.innerHTML=a.map(r=>`<div class="item"><div class="badge"><span class="n">${r.litros?Math.round(r.litros):'—'}</span><span class="u">litros</span></div><div class="info"><div class="t">${fmtShort(r.data)}</div><div class="d">${r.preco?'R$ '+r.preco.toFixed(2).replace('.',',')+' / litro':'—'}</div></div><div class="right"><div class="a out fig">${moneyHTML(r.valor)}</div><div class="actions"><button class="x" onclick="loadFuel('${r.id}')">editar</button><button class="x" onclick="del('fuel','${r.id}')">excluir</button></div></div></div>`).join('');
+}
+
+/* ---------- GASTOS ---------- */
+let editExp=null, expCat='Manutenção';
+// As catorze categorias viviam como catorze botoes soltos embrulhando em seis
+// fileiras tortas. Agora sao uma lista so, que abre por cima quando o motorista
+// toca no campo — e esta lista e a unica fonte da verdade das categorias.
+const CATEGORIAS=[
+  ['Manutenção','M7 7.5a3.5 3.5 0 0 0 4.6 4.6l6.3 6.3a1.7 1.7 0 0 0 2.4-2.4l-6.3-6.3A3.5 3.5 0 0 0 9.4 5z'],
+  ['Óleo','M12 3.5c3 4 5.5 6.6 5.5 9.4a5.5 5.5 0 0 1-11 0C6.5 10.1 9 7.5 12 3.5z'],
+  ['Pneu','M12 3.5a8.5 8.5 0 1 1 0 17 8.5 8.5 0 0 1 0-17zM12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z'],
+  ['Lavagem','M8 4.5c1.8 2.4 3 4 3 5.4a3 3 0 0 1-6 0C5 8.5 6.2 6.9 8 4.5zM16.5 11c1.4 1.9 2.3 3.1 2.3 4.2a2.3 2.3 0 0 1-4.6 0c0-1.1.9-2.3 2.3-4.2z'],
+  ['Aluguel','M14.5 4.5a5 5 0 1 1-3.6 8.5L4 19.9v-3h2.6v-2.6h2.6l1.3-1.3a5 5 0 0 1 4-8.5zM16 8.2v.01'],
+  ['Pedágio','M4 19.5h16M6.5 19.5 9 5h6l2.5 14.5M8 10h8M7.2 14.8h9.6'],
+  ['Alimentação','M7 3.5v8a2.5 2.5 0 0 0 5 0v-8M9.5 3.5v5M9.5 14v6.5M17 3.5c-1.4 1.3-2 3.2-2 5.2 0 1.6.7 2.8 2 3.1v8.7'],
+  ['Seguro','M12 3.5 19 6v5.5c0 4-2.9 7.4-7 9-4.1-1.6-7-5-7-9V6z'],
+  ['IPVA/Licenc.','M6 3.5h8l4 4v13H6zM14 3.5v4h4M9 12.5h6M9 16h4'],
+  ['Multa','M12 3.5 21.5 20H2.5zM12 10v4.2M12 16.8v.4'],
+  ['Financiamento','M3.5 9.5 12 4.5l8.5 5M5 9.5v9M19 9.5v9M9.5 9.5v9M14.5 9.5v9M3 20.5h18'],
+  ['Estacionamento','M4.5 4.5h15v15h-15zM10 16V8.5h2.6a2.8 2.8 0 0 1 0 5.6H10'],
+  ['Celular','M7.5 3h9a1.5 1.5 0 0 1 1.5 1.5v15A1.5 1.5 0 0 1 16.5 21h-9A1.5 1.5 0 0 1 6 19.5v-15A1.5 1.5 0 0 1 7.5 3zM10.5 18h3'],
+  ['Outros','M6 12v.01M12 12v.01M18 12v.01'],
+];
+const ICONE_DA_CATEGORIA=Object.fromEntries(CATEGORIAS);
+function svgDaCategoria(cat){
+  const d=ICONE_DA_CATEGORIA[cat]||ICONE_DA_CATEGORIA['Outros'];
+  return `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="${d}"/></svg>`;
+}
+function montarCategorias(){
+  const lista=document.getElementById('catLista'); if(!lista||lista.childElementCount)return;
+  lista.innerHTML=CATEGORIAS.map(([cat])=>
+    `<button type="button" class="cat-opcao" data-cat="${cat}" role="option" aria-selected="false">
+      <span class="cat-ic">${svgDaCategoria(cat)}</span><span class="cat-nome">${cat}</span>
+      <svg class="ic cat-check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+    </button>`).join('');
+  lista.addEventListener('click',e=>{ const o=e.target.closest('.cat-opcao'); if(!o)return; setCat(o.dataset.cat); fecharCategorias(); });
+}
+function abrirCategorias(){ montarCategorias(); setCat(expCat); // marca a atual antes de mostrar
+  document.getElementById('catModal').classList.add('show');
+  const marcada=document.querySelector('.cat-opcao[aria-selected="true"]')||document.querySelector('.cat-opcao');
+  marcada?.focus({preventScroll:true}); marcada?.scrollIntoView({block:'nearest'}); }
+function fecharCategorias(){ document.getElementById('catModal').classList.remove('show'); document.getElementById('e_cat')?.focus({preventScroll:true}); }
+function setCat(cat){
+  expCat=cat;
+  const nome=document.getElementById('e_cat_nome'); if(nome)nome.textContent=cat;
+  const ic=document.getElementById('e_cat_ic'); if(ic)ic.innerHTML=svgDaCategoria(cat);
+  document.querySelectorAll('.cat-opcao').forEach(o=>o.setAttribute('aria-selected',String(o.dataset.cat===cat)));
+}
+setCat(expCat); // desenha o icone e o nome da categoria inicial no campo fechado
+function saveExp(){
+  const data=val('e_data')||today();
+  const r={id:editExp||uid(),data,cat:expCat,valor:num('e_valor'),desc:val('e_desc').trim()};
+  if(r.valor<=0){ toast('Informe o valor'); return; }
+  const idx=editExp?DB.exp.findIndex(x=>x.id===editExp):-1;
+  if(idx>=0){ DB.exp[idx]=r; } else DB.exp.push(r);
+  save('rc_exp',DB.exp); resetExp(); renderExpList(); renderResumo(); toast('Despesa salva');
+}
+function resetExp(){ editExp=null; setVal('e_data',today()); setVal('e_valor',''); setVal('e_desc',''); setCat('Manutenção'); txt('expTitle','Nova despesa'); document.getElementById('expCancel').style.display='none'; }
+function loadExp(id){ const r=DB.exp.find(x=>x.id===id); if(!r)return; editExp=id; setVal('e_data',r.data); setNum('e_valor',r.valor); setVal('e_desc',r.desc||''); setCat(r.cat); txt('expTitle','Editar despesa'); document.getElementById('expCancel').style.display='block'; window.scrollTo(0,0); }
+function renderExpList(){
+  const el=document.getElementById('expList');
+  const a=[...DB.exp].sort((x,y)=>y.data.localeCompare(x.data)).slice(0,90);
+  if(!a.length){ el.innerHTML=empty(iconReceipt(),'Nenhuma despesa','Adicione um gasto para fechar seu saldo'); return; }
+  el.innerHTML=a.map(r=>`<div class="item"><div class="badge" style="padding:9px 6px"><span class="u" style="font-size:10px;letter-spacing:.4px;color:var(--muted)">${r.cat}</span></div><div class="info"><div class="t">${fmtShort(r.data)}</div><div class="d">${r.desc||r.cat}</div></div><div class="right"><div class="a out fig">${moneyHTML(r.valor)}</div><div class="actions"><button class="x" onclick="loadExp('${r.id}')">editar</button><button class="x" onclick="del('exp','${r.id}')">excluir</button></div></div></div>`).join('');
+}
+
+/* ---------- shared ---------- */
+function del(kind,id){ if(!confirm('Apagar este registro?'))return; DB[kind]=DB[kind].filter(x=>x.id!==id); window.SaldoFinalBackend?.recordDeleted?.(kind,id); saveAll(); renderAll(); toast('Apagado'); }
+function empty(icon,t,s){ return `<div class="empty"><div class="mk">${icon}</div><div class="t">${t}</div><div class="s">${s}</div></div>`; }
+function iconCar(){ return `<svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.4"/><path d="M12 9.6V3.5M9.9 13.6l-4.7 3.6M14.1 13.6l4.7 3.6"/></svg>` }
+function iconFuel(){ return `<svg class="ic" viewBox="0 0 24 24"><path d="M6 21V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v15M4.5 21h11.5M8 10h4"/><path d="M14 7.5l2.6 2.6a1.6 1.6 0 0 1 .4 1V16a1.5 1.5 0 0 0 3 0V8.5"/></svg>` }
+function iconReceipt(){ return `<svg class="ic" viewBox="0 0 24 24"><path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9.5 8.5h5M9.5 12h5"/></svg>` }
+
+/* ---------- meta ---------- */
+function openMeta(){ setNum('metaInput',DB.settings.metaDiaria); setNum('metaSemanaInput',DB.settings.metaSemanal); setNum('metaMesInput',DB.settings.metaMensal); document.getElementById('metaModal').classList.add('show'); }
+function closeMeta(){ document.getElementById('metaModal').classList.remove('show'); }
+function saveMeta(){ DB.settings.metaDiaria=num('metaInput'); DB.settings.metaSemanal=num('metaSemanaInput'); DB.settings.metaMensal=num('metaMesInput'); save('rc_settings',DB.settings); closeMeta(); renderResumo(); toast('Metas salvas'); }
+
+/* ---------- backup ---------- */
+function openBackup(){ document.getElementById('backupModal').classList.add('show'); }
+function closeBackup(){ document.getElementById('backupModal').classList.remove('show'); }
+function exportData(){
+  const data={app:'saldo-final',versao:3,exportado:new Date().toISOString(),days:DB.days,fuel:DB.fuel,exp:DB.exp,settings:DB.settings};
+  const b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=`saldo-final-backup-${today()}.json`; a.click(); URL.revokeObjectURL(a.href); toast('Backup baixado');
+}
+function importData(ev){
+  const f=ev.target.files[0]; if(!f)return; const r=new FileReader();
+  r.onload=()=>{ try{ const d=JSON.parse(r.result); if(!d.days&&!d.fuel&&!d.exp)throw 0;
+    if(!confirm('Isto SUBSTITUI os dados atuais pelos do backup. Continuar?'))return;
+    DB.days=d.days||[]; DB.fuel=d.fuel||[]; DB.exp=d.exp||[]; DB.settings=Object.assign({metaDiaria:0,metaSemanal:0,metaMensal:0},d.settings||{});
+    migrateDays(); saveAll(); renderAll(); closeBackup(); toast('Backup restaurado');
+  }catch(e){ alert('Arquivo inválido.'); } };
+  r.readAsText(f); ev.target.value='';
+}
+function wipeData(){ if(!confirm('Apagar TODOS os dados? Não tem volta. Faça backup antes.'))return; if(!confirm('Tem certeza mesmo?'))return; DB.days=[];DB.fuel=[];DB.exp=[]; DB.settings={metaDiaria:0,metaSemanal:0,metaMensal:0}; saveAll(); renderAll(); closeBackup(); toast('Tudo apagado'); }
+
+/* ---------- init ---------- */
+function renderAll(){ renderResumo(); renderDiaList(); renderFuelList(); renderExpList(); renderRelatorios(); }
+migrateDays();
+['d_data','f_data','e_data'].forEach(i=>setVal(i,today()));
+setDayApp('99');
+buildGaugeScale();
+renderDiaList(); renderFuelList(); renderExpList();
+renderResumo();
+</script>
+<script>
+(() => {
+  let lastTouchEnd = 0;
+  const blockGesture = event => event.preventDefault();
+  document.addEventListener('gesturestart', blockGesture, {passive:false});
+  document.addEventListener('gesturechange', blockGesture, {passive:false});
+  document.addEventListener('gestureend', blockGesture, {passive:false});
+  document.addEventListener('dblclick', blockGesture, {passive:false});
+  document.addEventListener('touchend', event => {
+    const now = Date.now();
+    if (now - lastTouchEnd <= 300) event.preventDefault();
+    lastTouchEnd = now;
+  }, {passive:false});
+})();
+</script>
+<script>window.SaldoFinalDB=DB;window.SaldoFinalRenderAll=renderAll;window.SaldoFinalToast=toast;</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./assets/saldo-backend-config.js"></script>
+<script type="module" src="./assets/saldo-backend.mjs"></script>
+<script type="module">
+import { createAssistantClient } from './assets/saldo-assistant.mjs';
+import { toLocalRecord } from './assets/saldo-assistant-contract.mjs';
+
+const modal = document.getElementById('assistantModal');
+const form = document.getElementById('assistantForm');
+const text = document.getElementById('assistantText');
+const send = document.getElementById('assistantSend');
+const mic = document.getElementById('assistantMic');
+const timer = document.getElementById('assistantTimer');
+const body = document.getElementById('assistantBody');
+const recBar = document.getElementById('assistantRec');
+const wave = recBar.querySelector('.chat-wave');
+const stopButton = document.getElementById('assistantStop');
+const discardButton = document.getElementById('assistantDiscard');
+const assistantBRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+
+function assistantMoney(value) { return assistantBRL.format(value || 0); }
+function assistantEsc(value) { return String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char])); }
+function assistantType(record) { return ({ day: 'Corrida', fuel: 'Combustível', expense: 'Despesa' })[record.type] ?? 'Registro'; }
+function assistantDetail(record) {
+  if (record.type === 'day') return `${record.app || 'app'} · ${record.corridas || 0} corridas · ${numBR(record.km)} km · ${numBR(record.horas)} h`;
+  if (record.type === 'fuel') return `${record.litros || 0} L · ${record.preco ? assistantMoney(record.preco) + '/L' : 'preço não informado'}`;
+  return `${record.cat || 'Despesa'}${record.desc ? ' · ' + record.desc : ''}`;
+}
+function assistantAmount(record) { return record.type === 'day' ? record.ganho : record.valor; }
+function assistantCollection(type) { return type === 'day' ? 'days' : (type === 'fuel' ? 'fuel' : 'exp'); }
+function formatTimer(ms) {
+  const total = Math.max(0, Math.floor((ms || 0) / 1000));
+  return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+}
+// O filtro do periodo, num lugar so. Alem dos periodos fixos e da data exata,
+// existe a JANELA MOVEL: "nesses ultimos dois dias". Ela nao cabia em nenhum
+// periodo fechado, entao a pergunta morria em AI_INVALID_COMMAND.
+//
+// A janela sempre inclui hoje: "ultimos dois dias" e hoje mais ontem. E o corte
+// usa data local, nunca UTC — as datas deste app sao todas locais.
+function filtroDoPeriodo(periodName, extra) {
+  if (periodName === 'custom') return (record) => String(record.data || '').slice(0, 10) === extra;
+  if (periodName === 'dias') {
+    const quantos = Math.max(1, Math.round(Number(extra) || 1));
+    const desde = new Date();
+    desde.setHours(0, 0, 0, 0);
+    desde.setDate(desde.getDate() - (quantos - 1));
+    return (record) => new Date(String(record.data || '').slice(0, 10) + 'T12:00') >= desde;
+  }
+  return (record) => window.matchesPeriod?.(record.data, periodName) ?? true;
+}
+
+function aggregateFor(periodName, customDate) {
+  const DB = window.SaldoFinalDB;
+  const pick = filtroDoPeriodo(periodName, customDate);
+  const days = DB.days.filter(pick);
+  const fuel = DB.fuel.filter(pick);
+  const exp = DB.exp.filter(pick);
+  const sum = (items, key) => items.reduce((total, item) => total + Number(item[key] || 0), 0);
+  const ganho = sum(days, 'ganho');
+  const combustivel = sum(fuel, 'valor');
+  const despesas = sum(exp, 'valor');
+  return {
+    ganho,
+    combustivel,
+    despesas,
+    gastos: combustivel + despesas,
+    saldo: ganho - combustivel - despesas,
+    corridas: sum(days, 'corridas'),
+    km: sum(days, 'km'),
+    horas: sum(days, 'horas'),
+  };
+}
+// A quebra que faltava: "quanto gastei com alimentacao" nao tinha resposta
+// porque o relatorio so somava tudo junto. Quem separa e o programa, com os
+// registros que ja estao no aparelho — conta feita, nao conta inventada.
+function quebraFor(periodName, customDate) {
+  const DB = window.SaldoFinalDB;
+  const pick = filtroDoPeriodo(periodName, customDate);
+  const porCategoria = {};
+  for (const gasto of DB.exp.filter(pick)) {
+    const nome = gasto.cat || 'Outros';
+    porCategoria[nome] = porCategoria[nome] || { valor: 0, quantos: 0 };
+    porCategoria[nome].valor += Number(gasto.valor || 0);
+    porCategoria[nome].quantos += 1;
+  }
+  // Combustivel nao e categoria de despesa — mora em lista propria —, mas na
+  // pergunta do motorista ele e um gasto como qualquer outro.
+  const combustiveis = DB.fuel.filter(pick);
+  if (combustiveis.length) {
+    porCategoria.Combustível = {
+      valor: combustiveis.reduce((total, f) => total + Number(f.valor || 0), 0),
+      quantos: combustiveis.length,
+    };
+  }
+  const porApp = {};
+  for (const dia of DB.days.filter(pick)) {
+    const nome = dia.app || '99';
+    porApp[nome] = porApp[nome] || { valor: 0, corridas: 0 };
+    porApp[nome].valor += Number(dia.ganho || 0);
+    porApp[nome].corridas += Number(dia.corridas || 0);
+  }
+  return { porCategoria, porApp };
+}
+
+function localSnapshot(report) {
+  const comQuebra = (periodo, data) => ({ ...aggregateFor(periodo, data), ...quebraFor(periodo, data) });
+  const snapshot = {
+    day: comQuebra('dia'),
+    week: comQuebra('semana'),
+    month: comQuebra('mes'),
+    all: comQuebra('tudo'),
+  };
+  if (report?.period === 'custom' && report?.date) snapshot.custom = comQuebra('custom', report.date);
+  if (report?.period === 'days' && report?.days) snapshot.recentes = comQuebra('dias', report.days);
+  return snapshot;
+}
+const NOME_DO_PERIODO = { day: 'hoje', week: 'esta semana', month: 'este mês', all: 'no total' };
+// O cartao passou a dizer SEMPRE de que periodo esta falando. Antes, periodo
+// que o modelo errasse virava "hoje" em silencio, e o motorista nao tinha como
+// saber que a resposta nao era da pergunta dele.
+function periodoEscrito(report) {
+  if (report?.period === 'days' && report?.days) {
+    const quantos = Math.max(1, Math.round(Number(report.days)));
+    return quantos === 1 ? 'hoje' : `últimos ${quantos} dias`;
+  }
+  if (report?.period === 'custom' && report?.date) return `em ${report.date}`;
+  return NOME_DO_PERIODO[report?.period] || 'hoje';
+}
+
+// A resposta direta quando a pergunta trouxe um filtro que se reconheceu.
+// Quando nao trouxe, ou quando nao se reconheceu, a quebra logo abaixo responde
+// do mesmo jeito — por isso errar o filtro nunca deixa o motorista sem numero.
+function respostaDireta(report, data) {
+  // O mesmo nome que o relatorio usa: duas fontes para a mesma frase era
+  // como o cartao acabava dizendo "hoje" numa pergunta de dois dias.
+  const quando = periodoEscrito(report);
+  if (report?.cat) {
+    const nome = report.cat === 'combustivel' ? 'Combustível' : report.cat;
+    const linha = data.porCategoria?.[nome];
+    const quantos = linha?.quantos ?? 0;
+    return { nome, quando, escopo: 'gasto', valor: linha?.valor ?? 0,
+      detalhe: quantos ? `em ${quantos} lançamento${quantos === 1 ? '' : 's'}` : 'nesse período' };
+  }
+  if (report?.app) {
+    const nome = ROTULO_DO_APP[report.app] || report.app;
+    const linha = data.porApp?.[report.app];
+    const corridas = linha?.corridas ?? 0;
+    return { nome, quando, escopo: 'ganho', valor: linha?.valor ?? 0,
+      detalhe: corridas ? `em ${corridas} corrida${corridas === 1 ? '' : 's'}` : 'nesse período' };
+  }
+  return null;
+}
+
+// Uma linha da quebra: nome, valor e uma barra do tamanho da fatia. A barra
+// existe porque "530 e 50,69" em texto corrido nao mostra que um e dez vezes o
+// outro — a barra mostra antes de qualquer conta.
+function linhaDaQuebra(nome, valor, maior, cor) {
+  const fatia = maior > 0 ? Math.round((valor / maior) * 100) : 0;
+  const pintura = cor ? `background:${assistantEsc(cor)}` : '';
+  // Barra de 2% nao se ve. O min-width garante que uma fatia pequena continue
+  // sendo um tracinho visivel, em vez de sumir e parecer zero.
+  return `<div class="rel-linha"><div class="rel-linha-topo"><span>${assistantEsc(nome)}</span>`
+    + `<b>${assistantMoney(valor)}</b></div>`
+    + `<div class="rel-barra"><i style="width:${fatia}%;${pintura}"></i></div></div>`;
+}
+
+function blocoDaQuebra(titulo, entradas, cores) {
+  if (!entradas.length) return '';
+  const ordenadas = [...entradas].sort((a, b) => b[1] - a[1]);
+  const maior = ordenadas[0][1];
+  return `<section class="rel-secao"><h4>${assistantEsc(titulo)}</h4>`
+    + ordenadas.map(([nome, valor]) => linhaDaQuebra(nome, valor, maior, cores?.[nome])).join('')
+    + '</section>';
+}
+
+const ROTULO_DO_APP = { '99': '99', uber: 'Uber', indrive: 'inDrive' };
+
+// O relatorio inteiro. Fica sempre disponivel: quando a pergunta nao trouxe
+// filtro ele aparece aberto, e quando trouxe ele fica a um toque de distancia.
+// Assim a rede de seguranca continua existindo (se a IA errar o filtro, o
+// numero certo esta logo ali) sem despejar na tela o que ninguem perguntou.
+function blocoDoRelatorio(data, quando, gastos, ganhos) {
+  const cores = Object.fromEntries(Object.entries(APPS).map(([, app]) => [app.nome, app.color]));
+  return '<div class="rel-geral">'
+    + `<div class="rel-topo"><span class="rel-rotulo">Relatório${quando}</span>`
+    + '<span class="rel-selo">somente leitura</span></div>'
+    + '<div><span class="rel-sub">Sobrou no bolso</span>'
+    + `<strong class="rel-numero rel-saldo">${assistantMoney(data.saldo)}</strong></div>`
+    + '<div class="rel-par">'
+    + `<div><span>Entrou</span><b>${assistantMoney(data.ganho)}</b></div>`
+    + `<div><span>Saiu</span><b>${assistantMoney(data.gastos)}</b></div>`
+    + '</div>'
+    + blocoDaQuebra('De onde veio', ganhos, cores)
+    + blocoDaQuebra('Onde foi o dinheiro', gastos, null)
+    + '<div class="rel-par rel-chips">'
+    + `<div><b>${data.corridas}</b><span>corridas</span></div>`
+    + `<div><b>${data.km.toLocaleString('pt-BR', { maximumFractionDigits: 1 })}</b><span>km</span></div>`
+    + '</div></div>';
+}
+
+// A resposta em destaque, quando a pergunta veio com filtro. O numero pedido
+// ocupa a tela; a fatia diz o tamanho dele sem obrigar o motorista a ler o
+// relatorio todo para descobrir.
+function blocoDoFoco(direta, data) {
+  const total = direta.escopo === 'gasto' ? data.gastos : data.ganho;
+  const fatia = total > 0 ? (direta.valor / total) * 100 : 0;
+  const rodape = direta.valor > 0 && total > 0
+    ? '<div class="rel-fatia">'
+      + `<div class="rel-linha-topo"><span>Fatia de tudo que ${direta.escopo === 'gasto' ? 'saiu' : 'entrou'}</span>`
+      + `<b>${fatia.toLocaleString('pt-BR', { maximumFractionDigits: 1 })}%</b></div>`
+      + `<div class="rel-barra"><i style="width:${Math.min(100, fatia)}%"></i></div>`
+      + `<span class="rel-sub">de ${assistantMoney(total)} no período</span></div>`
+    : '';
+  return '<div class="rel-foco">'
+    + `<div class="rel-topo"><span class="rel-rotulo">${assistantEsc(direta.nome)}</span>`
+    + `<span class="rel-selo">${assistantEsc(direta.quando)}</span></div>`
+    + `<strong class="rel-numero">${direta.valor > 0 ? assistantMoney(direta.valor) : 'nada lançado'}</strong>`
+    + `<span class="rel-sub">${assistantEsc(direta.detalhe)}</span>`
+    + rodape + '</div>';
+}
+
+function renderLocalReport(command, snapshot) {
+  const report = command.report;
+  const period = report?.period;
+  const chaves = { week: 'week', month: 'month', all: 'all', custom: 'custom', days: 'recentes' };
+  const data = snapshot[chaves[period]] || snapshot.day;
+  const quando = ` · ${assistantEsc(periodoEscrito(report))}`;
+  const direta = respostaDireta(report, data);
+
+  const gastos = Object.entries(data.porCategoria || {}).map(([nome, linha]) => [nome, linha.valor]).filter(([, v]) => v > 0);
+  const ganhos = Object.entries(data.porApp || {})
+    .map(([nome, linha]) => [ROTULO_DO_APP[nome] || nome, linha.valor])
+    .filter(([, v]) => v > 0);
+
+  const relatorio = blocoDoRelatorio(data, quando, gastos, ganhos);
+  if (!direta) return relatorio;
+  // Com filtro, o relatorio inteiro vai para dentro de um <details>: continua
+  // na tela, fechado, a um toque. Foi o pedido do motorista — ele perguntou uma
+  // coisa e recebia quatro.
+  return blocoDoFoco(direta, data)
+    + `<details class="rel-mais"><summary>Ver o relatório inteiro</summary>${relatorio}</details>`;
+}
+function confirmAssistant(command) {
+  const DB = window.SaldoFinalDB;
+  // O mesmo plano que a previa mostrou: a tela promete e o registro cumpre.
+  const plano = planoDoAssistente(command);
+  let novos = 0;
+  let juntados = 0;
+  for (const passo of plano) {
+    if (passo.acao === 'juntar') {
+      passo.alvo.obs = juntarObs(passo.alvo.obs, passo.record.obs);
+      juntados += 1;
+      continue;
+    }
+    const local = toLocalRecord(passo.record, { idFactory: window.uid || (() => crypto.randomUUID()) });
+    DB[assistantCollection(passo.record.type)].push(local);
+    novos += 1;
+  }
+  window.saveAll?.();
+  window.SaldoFinalRenderAll?.();
+  const partes = [];
+  if (novos) partes.push(`${novos} registro${novos === 1 ? '' : 's'} salvo${novos === 1 ? '' : 's'}`);
+  if (juntados) partes.push(`observação acrescentada${juntados > 1 ? ` a ${juntados} corridas` : ''}`);
+  window.SaldoFinalToast?.(`${partes.join(' e ')} pelo assistente`);
+}
+
+const assistant = createAssistantClient({
+  endpoint: `${window.SALDO_FINAL_CONFIG?.url || ''}/functions/v1/ai-assistant`,
+  mediaDevices: navigator.mediaDevices,
+  MediaRecorderCtor: window.MediaRecorder,
+  now: () => Date.now(),
+  today: window.today,
+  bridge: {
+    getAccessToken: () => window.SaldoFinalBackend?.getState?.().session?.access_token ?? '',
+    isOnline: () => navigator.onLine !== false,
+    getLocalSnapshot: localSnapshot,
+    renderReport: renderLocalReport,
+    confirmPreview: confirmAssistant,
+    onStateChange: renderAssistant,
+  },
+});
+
+/* A conversa e montada do zero a cada mudanca de estado. Comeca limpa toda vez
+   que abre: nada e guardado entre aberturas, como o motorista pediu. As falas do
+   usuario ficam num vetor local que morre junto com a tela. */
+let falas = [];
+
+function bolha(lado, texto, tom) {
+  return `<div class="bolha ${lado}${tom ? ' ' + tom : ''}">${assistantEsc(texto)}</div>`;
+}
+
+const EXEMPLOS = [
+  'Fiz 180 na 99 hoje, 15 corridas',
+  'Gastei 80 de combustível',
+  'Como foi minha semana?',
+];
+
+// Os exemplos so ensinam o jeito de falar; nao sao clicaveis, para ninguem
+// registrar sem querer um valor que nao e o seu.
+function blocoExemplos() {
+  return `<div class="chat-exemplos"><div class="k">Por exemplo</div>${
+    EXEMPLOS.map((frase) => `<p>${assistantEsc(frase)}</p>`).join('')
+  }</div>`;
+}
+
+// "Adiciona so a observacao" virava uma linha nova de R$ 0,00 com 0 corridas,
+// porque o assistente so sabe CRIAR registro — o prompt proibe comando de
+// edicao de proposito, para uma IA que erra nunca sobrescrever um ganho certo.
+// Resultado: a corrida de verdade continuava la, mas com uma linha fantasma do
+// lado, e o motorista lia como se tivesse sido substituida.
+//
+// Quem junta agora e o app, com regra fixa, nao a IA: um registro de dia que so
+// tem observacao (sem ganho, corridas, km ou horas) e que encontra uma corrida
+// do MESMO dia e da MESMA plataforma vira um acrescimo naquela corrida.
+//
+// A mesma funcao serve a previa e a gravacao. Se cada uma decidisse por conta,
+// a tela prometeria uma coisa e o registro faria outra.
+function soObservacao(record) {
+  return record.type === 'day' && String(record.obs || '').trim()
+    && !record.ganho && !record.corridas && !record.km && !record.horas;
+}
+
+function planoDoAssistente(command) {
+  const dias = window.SaldoFinalDB?.days || [];
+  return (command?.records || []).map((record) => {
+    if (!soObservacao(record)) return { acao: 'novo', record };
+    const app = record.app || '99';
+    // O ultimo da lista: se houver mais de uma corrida do dia naquela
+    // plataforma, a mais recente e a que o motorista acabou de registrar.
+    const alvo = [...dias].reverse().find((d) => d.data === record.date && (d.app || '99') === app);
+    return alvo ? { acao: 'juntar', record, alvo } : { acao: 'novo', record };
+  });
+}
+
+// Nunca substitui o que o motorista ja tinha escrito: acrescenta.
+function juntarObs(antiga, nova) {
+  const velha = String(antiga || '').trim();
+  const texto = String(nova || '').trim();
+  if (!velha) return texto;
+  if (velha.toLowerCase().includes(texto.toLowerCase())) return velha;
+  return `${velha}; ${texto}`;
+}
+
+function linhaJuncao(passo) {
+  const app = passo.alvo.app || '99';
+  const cor = { '99': 'var(--p99)', uber: 'var(--puber)', indrive: 'var(--pindrive)' }[app] || 'var(--muted)';
+  const selo = `<span class="sel" style="color:${cor}">${assistantEsc(({ '99': '99', uber: 'UB', indrive: 'IND' })[app] || '99')}</span>`;
+  return `<div class="previa">${selo}<span class="txt"><b>Acrescentar observacao</b>` +
+    `<small>na corrida de ${assistantEsc(passo.alvo.data)} · ${assistantMoney(passo.alvo.ganho)} · ` +
+    `${assistantEsc(String(passo.alvo.corridas || 0))} corridas</small></span></div>` +
+    `<div class="previa-obs">“${assistantEsc(passo.record.obs)}”</div>`;
+}
+
+function linhaPrevia(record) {
+  const app = record.type === 'day' ? (record.app || '99') : null;
+  const cor = { '99': 'var(--p99)', uber: 'var(--puber)', indrive: 'var(--pindrive)' }[app] || 'var(--muted)';
+  const selo = app
+    ? `<span class="sel" style="color:${cor}">${assistantEsc(({ '99': '99', uber: 'UB', indrive: 'IND' })[app] || '99')}</span>`
+    : '<span class="sel">R$</span>';
+  const direcao = record.type === 'day' ? 'in' : 'out';
+  return `<div class="previa">${selo}<span class="txt"><b>${assistantEsc(assistantType(record))}</b>` +
+    `<small>${assistantEsc(record.date)} · ${assistantEsc(assistantDetail(record))}</small></span>` +
+    `<b class="val ${direcao} fig">${assistantMoney(assistantAmount(record))}</b></div>`;
+}
+
+function blocoPrevia(command) {
+  const plano = planoDoAssistente(command);
+  return `<div class="bolha deles larga">` +
+    `<div>Entendi assim. Confere?</div>` +
+    plano.map((passo) => (passo.acao === 'juntar' ? linhaJuncao(passo) : linhaPrevia(passo.record))).join('') +
+    `<div class="chat-acoes"><button type="button" class="ok" id="assistantConfirm">Salvar</button>` +
+    `<button type="button" class="nao" id="assistantCancel">Corrigir</button></div></div>`;
+}
+
+// A tela de ganhos de qualquer app nao diz de que app ela e — e eu proibi o
+// modelo de adivinhar isso pelo desenho da tela, porque acertar hoje e errar
+// amanha com outro aplicativo. Entao o print SEMPRE para aqui.
+//
+// Digitar antes de escolher a imagem resolvia, mas ninguem adivinha essa
+// ordem. Tres botoes respondem a pergunta sem teclado.
+const APPS_DO_ASSISTENTE = [['99', '99'], ['uber', 'Uber'], ['indrive', 'inDrive']];
+
+function blocoPlataforma(mensagem) {
+  return `<div class="bolha deles larga"><div>${assistantEsc(mensagem)}</div>`
+    + `<div class="chat-acoes">`
+    + APPS_DO_ASSISTENTE.map(([valor, nome]) =>
+      `<button type="button" class="nao app" data-assistant-app="${valor}">${assistantEsc(nome)}</button>`).join('')
+    + `</div></div>`;
+}
+
+// Só vale a pena mostrar os botões quando é ISSO que falta e quando existe um
+// pedido para completar — responder "99" sem pedido anterior começaria um
+// registro do nada.
+function faltaSoAPlataforma(state) {
+  const falta = state.command?.missing || [];
+  return state.status === 'clarification' && !!state.pedido
+    && falta.length === 1 && /plataforma/i.test(String(falta[0]));
+}
+
+function blocoDetalhe(detalhe) {
+  return `<details class="chat-detalhe"><summary>Detalhes técnicos</summary>` +
+    `<code>${assistantEsc(detalhe)}</code></details>`;
+}
+function blocoFalha(mensagem) {
+  const tom = /limite|cota/i.test(mensagem) ? 'aviso' : 'erro';
+  return `<div class="bolha deles larga ${tom}"><div>${assistantEsc(mensagem)}</div>` +
+    `<button type="button" class="chat-manual" data-assistant-manual="dia">Registrar na mão</button></div>`;
+}
+
+// O microfone muda 60 vezes por segundo. Passar isso pelo estado redesenharia
+// a conversa inteira a cada quadro, entao a onda e o unico pedaco da tela que
+// se atualiza fora do render.
+//
+// A onda e um HISTORICO, como a do WhatsApp: cada barra guarda um pedacinho do
+// que ja foi falado. A cada passo entra uma barra nova pela direita e as
+// outras andam para a esquerda, sem mudar de altura. Mostrar o som do instante
+// em todas as barras ao mesmo tempo, que foi o que tentei antes, faz a onda
+// piscar em bloco — e foi exatamente disso que o motorista nao gostou.
+const barrasDaOnda = [...wave.querySelectorAll('i')];
+const ONDA_MINIMA = 2;       // px: igual a largura, entao o silencio e um circulo
+const ONDA_MAXIMA = 26;      // px: a barra mais alta que cabe na tira
+// A curva abre o meio da escala. Sem ela, fala normal batia no teto quase
+// sempre e a tira virava um bloco de barras da mesma altura; com ela, silaba
+// fraca fica baixinha, silaba forte estica, e a onda ganha relevo.
+const ONDA_CURVA = 0.72;
+const ONDA_PASSO_MS = 70;    // de quanto em quanto tempo entra uma barra nova
+const historico = barrasDaOnda.map(() => ONDA_MINIMA);
+let ondaEmCurso = 0;
+let ultimoPasso = 0;
+let picoDoPasso = 0;
+
+function desenharOnda() {
+  barrasDaOnda.forEach((barra, i) => {
+    barra.style.height = `${historico[i].toFixed(1)}px`;
+    // Barra alta acende, barra baixa apaga: e o que da profundidade ao rastro.
+    barra.style.opacity = (0.55 + (historico[i] - ONDA_MINIMA) / (ONDA_MAXIMA - ONDA_MINIMA) * 0.45).toFixed(2);
+  });
+}
+
+function animarOnda(agora) {
+  ondaEmCurso = requestAnimationFrame(animarOnda);
+  // Guarda o PICO entre um passo e outro, nao o valor do instante em que o
+  // passo caiu: assim uma silaba curta nao desaparece so por ter acontecido
+  // entre dois quadros.
+  picoDoPasso = Math.max(picoDoPasso, assistant.getMicLevel());
+  if (agora - ultimoPasso < ONDA_PASSO_MS) return;
+  ultimoPasso = agora;
+  historico.shift();
+  historico.push(ONDA_MINIMA + Math.pow(picoDoPasso, ONDA_CURVA) * (ONDA_MAXIMA - ONDA_MINIMA));
+  picoDoPasso = 0;
+  desenharOnda();
+}
+
+function zerarOnda() {
+  historico.fill(ONDA_MINIMA);
+  picoDoPasso = 0;
+  ultimoPasso = 0;
+  desenharOnda();
+}
+
+function seguirVoz(gravando) {
+  if (gravando && !ondaEmCurso) {
+    // Gravacao nova comeca com a onda limpa: o rastro da anterior nao tem nada
+    // a ver com esta.
+    zerarOnda();
+    ondaEmCurso = requestAnimationFrame(animarOnda);
+    return;
+  }
+  if (!gravando && ondaEmCurso) {
+    cancelAnimationFrame(ondaEmCurso);
+    ondaEmCurso = 0;
+    zerarOnda();
+  }
+}
+
+function renderAssistant() {
+  const state = assistant.getState();
+  const aberto = state.status !== 'closed';
+  modal.classList.toggle('show', aberto);
+  // Fechar durante a gravacao sai por aqui, antes de tudo: sem este seguirVoz
+  // o laco da onda continuaria rodando com a tela fechada, para sempre.
+  if (!aberto) {
+    seguirVoz(false);
+    // A imagem do print vive num endereco temporario do navegador. Sem soltar,
+    // cada print mandado fica na memoria ate a aba fechar.
+    for (const fala of falas) if (fala && fala.tipo === 'print') URL.revokeObjectURL(fala.url);
+    falas = [];
+    text.value = '';
+    body.innerHTML = '';
+    return;
+  }
+
+  const gravando = state.status === 'recording';
+  const ocupado = state.status === 'submitting' || gravando;
+  form.hidden = gravando;
+  recBar.hidden = !gravando;
+  seguirVoz(gravando);
+  text.disabled = ocupado;
+  send.disabled = ocupado;
+  mic.disabled = state.status === 'submitting';
+  mic.setAttribute('aria-pressed', String(gravando));
+  timer.textContent = formatTimer(state.recordingMs).replace(/^0(\d):/, '$1:');
+
+  const partes = [bolha('deles', 'Oi! Me conta o que você quer registrar — pode escrever ou falar.')];
+  const ditas = state.transcript ? [...falas, state.transcript] : falas;
+  if (!ditas.length && state.status === 'idle') partes.push(blocoExemplos());
+  for (const fala of ditas) {
+    // O print aparece como IMAGEM na conversa. Mostrar "(print da tela de
+    // ganhos)" escrito era pedir ao motorista que confiasse na memoria dele
+    // sobre qual print mandou — e ele tem de ver o que foi enviado.
+    if (fala && typeof fala === 'object' && fala.tipo === 'print') {
+      // A miniatura na conversa e pequena demais para conferir numero. Tocar
+      // nela abre o print inteiro numa aba, que e o que o motorista faria com
+      // qualquer foto.
+      partes.push(`<div class="bolha minha bolha-print">`
+        + `<a href="${assistantEsc(fala.url)}" target="_blank" rel="noopener" aria-label="Abrir o print em tamanho cheio">`
+        + `<img src="${assistantEsc(fala.url)}" alt="Print da tela de ganhos que você enviou"></a>`
+        + (fala.texto ? `<span>${assistantEsc(fala.texto)}</span>` : '')
+        + '</div>');
+      continue;
+    }
+    partes.push(bolha('minha', fala));
+  }
+
+  if (state.status === 'submitting') partes.push('<div class="bolha deles pensando"><i></i><i></i><i></i></div>');
+  else if (gravando) partes.push(bolha('deles', 'Pode falar. Toque no quadrado quando terminar.'));
+  else if (state.status === 'preview') {
+    if (state.incerto) partes.push(bolha('deles aviso', 'Não tenho certeza de que entendi direito — confere os valores antes de salvar.'));
+    partes.push(blocoPrevia(state.command));
+  }
+  else if (state.status === 'error' || state.status === 'quota') partes.push(blocoFalha(state.message || 'Não deu para usar a IA agora.'));
+  // O relatorio e o unico conteudo que entra como HTML, e ele e montado aqui
+  // dentro a partir dos numeros do aparelho — nada do que a IA escreve passa
+  // por este caminho sem assistantEsc.
+  else if (state.reportOutput) partes.push(`<div class="bolha deles larga relatorio">${state.reportOutput}</div>`);
+  else if (faltaSoAPlataforma(state)) partes.push(blocoPlataforma(state.message));
+  else if (state.message) partes.push(bolha('deles', state.message));
+  // O motivo tecnico da recusa, fechado por padrao. Fica fora do caminho de quem
+  // so quer registrar a corrida, e a mao para quem precisa saber o que quebrou.
+  // A tela de ganhos se confere sozinha: ganho por corrida x corridas tem de
+  // dar o total. Quando nao da, algum numero foi lido errado — e o motorista
+  // precisa ver isso ANTES de salvar, nao depois.
+  if (state.conferencia) {
+    partes.push(bolha('deles aviso', 'Confere esse número antes de salvar: a conta da própria tela não fechou — '
+      + state.conferencia + '.'));
+  }
+  if (state.detalhe) partes.push(blocoDetalhe(state.detalhe));
+
+  body.innerHTML = partes.join('');
+  body.dataset.state = state.status; // deixa o estado visivel para testes e leitores de tela
+  body.scrollTop = body.scrollHeight;
+}
+
+async function enviar(frase) {
+  const limpa = String(frase || '').trim();
+  if (!limpa) return;
+  falas.push(limpa);
+  text.value = '';
+  await assistant.submitText(limpa);
+}
+
+document.querySelectorAll('[data-open-assistant]').forEach((button) => button.addEventListener('click', () => {
+  assistant.open();
+  renderAssistant();
+  text.focus();
+}));
+document.querySelectorAll('[data-assistant-close]').forEach((button) => button.addEventListener('click', () => assistant.close()));
+form.addEventListener('submit', async (event) => { event.preventDefault(); await enviar(text.value); });
+mic.addEventListener('click', async () => { await assistant.startRecording(); });
+
+// O print da tela de ganhos. O que estiver escrito no campo de texto vai
+// junto: a tela da 99 nao mostra km nem horas, entao "90 km e 6 horas" digitado
+// ali completa o que a imagem nao tem.
+// Print de iPhone sai grande demais para mandar inteiro: pesa no 4G e o
+// provedor tem limite de tamanho de entrada. Encolher para 1280px de lado maior
+// mantem o numero legivel — e um print de tela de ganhos e texto grande — e
+// corta o arquivo para uma fracao do tamanho.
+//
+// Se der qualquer problema, vai o arquivo original: encolher e melhoria, nao
+// requisito, e falhar aqui nao pode impedir o registro.
+const LADO_MAXIMO_DO_PRINT = 1280;
+async function encolherPrint(arquivo) {
+  try {
+    if (typeof createImageBitmap !== 'function') return arquivo;
+    const bitmap = await createImageBitmap(arquivo);
+    const maior = Math.max(bitmap.width, bitmap.height);
+    const escala = maior > LADO_MAXIMO_DO_PRINT ? LADO_MAXIMO_DO_PRINT / maior : 1;
+    if (escala === 1 && arquivo.size < 400 * 1024) { bitmap.close?.(); return arquivo; }
+    const tela = document.createElement('canvas');
+    tela.width = Math.round(bitmap.width * escala);
+    tela.height = Math.round(bitmap.height * escala);
+    tela.getContext('2d').drawImage(bitmap, 0, 0, tela.width, tela.height);
+    bitmap.close?.();
+    const menor = await new Promise((pronto) => tela.toBlob(pronto, 'image/jpeg', 0.82));
+    if (!menor || menor.size <= 0 || menor.size >= arquivo.size) return arquivo;
+    return new File([menor], 'print.jpg', { type: 'image/jpeg' });
+  } catch {
+    return arquivo;
+  }
+}
+
+// Ler o print da tela de ganhos esta DESLIGADO a pedido do Daniel, em
+// 20/09/2026. Funciona de ponta a ponta — o modelo le os numeros, a tela se
+// confere sozinha e a plataforma se responde num toque —, mas ele preferiu
+// tirar do caminho por enquanto.
+//
+// Para religar: troque esta linha para `true`. Nada mais precisa mudar; o
+// servidor, o contrato, os botoes de plataforma e os testes continuam todos
+// no lugar. PRINT-DE-GANHOS.md conta onde cada pedaco mora e o que ja foi
+// descoberto do jeito dificil.
+const PRINT_ATIVO = false;
+
+const printBotao = document.getElementById('assistantPrint');
+if (!PRINT_ATIVO) printBotao.hidden = true;
+// Exposto so para o teste poder cobrar que o botao concorde com a chave — nos
+// dois sentidos. Desligar em silencio e tao ruim quanto religar em silencio.
+window.SaldoFinalPrintAtivo = PRINT_ATIVO;
+const printArquivo = document.getElementById('assistantPrintFile');
+printBotao.addEventListener('click', () => printArquivo.click());
+printArquivo.addEventListener('change', async () => {
+  const arquivo = printArquivo.files && printArquivo.files[0];
+  // O input fica vazio de novo na hora: sem isso, escolher o MESMO print duas
+  // vezes seguidas nao dispara nada e parece que o botao quebrou.
+  printArquivo.value = '';
+  if (!arquivo) return;
+  const junto = text.value.trim();
+  // A conversa mostra o print ORIGINAL — e o que abre em tamanho cheio ao
+  // tocar. Quem viaja pela rede e a copia menor.
+  falas.push({ tipo: 'print', url: URL.createObjectURL(arquivo), texto: junto });
+  text.value = '';
+  await assistant.submitImage(await encolherPrint(arquivo), junto);
+});
+stopButton.addEventListener('click', async () => { await assistant.stopRecording(); });
+discardButton.addEventListener('click', () => assistant.cancelRecording());
+
+// Os balões são remontados a cada estado, então os botões dentro deles não podem
+// ter ouvinte fixo: quem escuta é a área da conversa.
+body.addEventListener('click', async (event) => {
+  if (event.target.closest('#assistantConfirm')) return assistant.confirmPreview();
+  if (event.target.closest('#assistantCancel')) {
+    const ultima = assistant.getState().transcript || falas.pop() || '';
+    assistant.cancelPreview();
+    text.value = ultima; // "Corrigir" devolve o texto em vez de so descartar
+    text.focus();
+    return;
+  }
+  const app = event.target.closest('[data-assistant-app]');
+  if (app) return assistant.completarPedido(`na ${app.dataset.assistantApp}`);
+  const manual = event.target.closest('[data-assistant-manual]');
+  if (manual) { assistant.close(); window.showView?.(manual.dataset.assistantManual || 'dia'); }
+});
+
+window.SaldoFinalAssistant = assistant;
+window.SaldoFinalAssistantUi = { close: () => assistant.close(), render: renderAssistant };
+</script>
+<script type="module" src="./assets/prisma-viewer.js"></script>
+<script>
+/* Auto-atualizacao: o celular guarda a pagina em cache e continua abrindo a versao
+   antiga depois de uma publicacao. Aqui a propria pagina confere se ha versao nova
+   e recarrega uma unica vez, com um endereco diferente (?v=), que o cache nao tem.
+   20260920162916 e trocado pelo numero real na hora de publicar. */
+(function () {
+  var VERSAO = '20260920162916';
+  var alvo = document.getElementById('appVersao');
+  if (alvo) alvo.textContent = VERSAO.indexOf('__SF') === 0 ? 'versão local' : 'versão ' + VERSAO;
+  if (VERSAO.indexOf('__SF') === 0) return; // rodando local, sem publicar: nao faz nada
+  // Voltando do login do Google a sessao vem depois do "#". Recarregar agora jogaria
+  // ela fora e o login se perderia. Deixa o app entrar; conferimos na proxima abertura.
+  if (location.hash.indexOf('access_token') >= 0) return;
+  fetch('./version.json', { cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (v) {
+      if (!v || !v.versao || v.versao === VERSAO) return;
+      var marca = 'sf-atualizado-' + v.versao;
+      try { if (sessionStorage.getItem(marca)) return; sessionStorage.setItem(marca, '1'); } catch (e) {}
+      location.replace(location.pathname + '?v=' + encodeURIComponent(v.versao) + location.hash);
+    })
+    .catch(function () {});
+})();
+// O botao do assistente fica parado em cima do "Salvar" na aba Corridas e do
+// valor da 99 em Relatorios. Rolando para baixo ele recolhe; para cima, volta.
+(function(){
+  const fab=document.querySelector('.assistant-fab'); if(!fab)return;
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  let anterior=window.scrollY, pendente=false;
+  addEventListener('scroll',()=>{
+    if(pendente)return; pendente=true;
+    requestAnimationFrame(()=>{
+      pendente=false;
+      const agora=window.scrollY;
+      if(Math.abs(agora-anterior)<8)return;
+      fab.dataset.tucked=String(agora>anterior&&agora>140);
+      anterior=agora;
+    });
+  },{passive:true});
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "Saldo Final",
+  "short_name": "Saldo Final",
+  "description": "Controle e saldo do motorista",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0d121a",
+  "theme_color": "#0d121a",
+  "icons": [
+    {
+      "src": "./assets/app-icon-wallet-v2.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
